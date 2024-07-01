@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import logo from "../assets/PupiLinks_menu.png";
 import AlternateEmailIcon from '@mui/icons-material/AlternateEmail';
 import KeyIcon from '@mui/icons-material/Key';
+import { Link } from "react-router-dom";
 
 const Register: React.FC = () => {
     const [selectedRole, setSelectedRole] = useState<'Inquilino' | 'Propietario'>('Inquilino');
@@ -79,7 +80,7 @@ const Register: React.FC = () => {
 
                 <div className="mt-4 text-center">
                     <span className="text-gray-700">¿Ya tienes cuenta? </span>
-                    <a href="#" className="text-custom-purple hover:underline">Inicia Sesion Aqui</a>
+                    <Link to="/login" className="text-custom-purple hover:underline">Inicia Sesion Aqui</Link>
                 </div>
             </div>
         </div>

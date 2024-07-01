@@ -1,5 +1,6 @@
 import React from "react";
 import logo from "../assets/PupiLinks_menu.png";
+import { Link } from "react-router-dom";
 import AlternateEmailIcon from '@mui/icons-material/AlternateEmail';
 import KeyIcon from '@mui/icons-material/Key';
 
@@ -55,7 +56,7 @@ const Login: React.FC = () => {
                         </div>
                     </div>
                     <div className="text-center mb-4">
-                        <a href="#" className="text-sm text-custom-purple hover:underline">¿Has olvidado tu contraseña?</a>
+                    <Link to="/forgot-password" className="text-sm text-custom-purple hover:underline">¿Has olvidado tu contraseña?</Link>
                     </div>
                     <button type="submit" className="w-full py-2 text-white text-xl font-bold bg-custom-purple rounded-full shadow-lg hover:bg-purple-700">
                         Iniciar sesión
@@ -65,7 +66,7 @@ const Login: React.FC = () => {
 
                 <div className="mt-4 text-center">
                     <span className="text-gray-700">¿No tienes una cuenta? </span>
-                    <a href="#" className="text-custom-purple hover:underline">Regístrate aquí</a>
+                    <Link to="/register" className="text-custom-purple hover:underline">Regístrate aquí</Link>
                 </div>
             </div>
         </div>
