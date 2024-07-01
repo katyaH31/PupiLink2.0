@@ -4,6 +4,8 @@ import './App.css'
 import PupilinkRoutes from './enums/PupilinkRoutes'
 import Home from './pages/Home'
 import DefaultTheme from './themes/DefaultTheme'
+import Register from './pages/Register'
+import Login from './pages/Login'
 
 
 function App() {
@@ -11,7 +13,7 @@ function App() {
   const router = createBrowserRouter([
     {
       path: PupilinkRoutes.ROOT,
-      element: <Home />,
+      element: <Login />,
     },
   ]);
 
