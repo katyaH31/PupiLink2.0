@@ -4,9 +4,14 @@ import { TypographyStyleOptions } from "@mui/material/styles/createTypography";
 const headerStyleOptions: TypographyStyleOptions = {
   fontFamily: "Barlow Condensed, Arial",
   fontWeight: "bold",
-}
+};
 
 const DefaultTheme = createTheme({
+  palette: {
+    background: {
+      default: "#F5F5F5",
+    },
+  },
   typography: {
     fontFamily: "Montserrat, Arial",
     h1: headerStyleOptions,
