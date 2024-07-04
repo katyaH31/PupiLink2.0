@@ -13,8 +13,9 @@ const Login: React.FC = () => {
     const handleLogin = async (e: React.FormEvent) => {
         e.preventDefault();
         try {
-            await pb.collection('users').authWithPassword(email, password);
+            const authData = await pb.collection('users').authWithPassword(email, password);
             alert('Inicio de sesión exitoso');
+            console.log(authData);
             navigate('/'); // Redirigir a la página principal u otra página después del inicio de sesión
         } catch (error) {
             alert('Error al iniciar sesión');
