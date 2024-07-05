@@ -32,19 +32,6 @@ const Login: React.FC = () => {
                     Inicia sesión y empieza tu nueva experiencia
                 </h2>
 
-                <button className="flex items-center w-full mb-4 bg-blue-600 rounded-sm shadow-lg hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-400 focus:ring-opacity-75">
-                    <div className="flex items-center justify-center bg-white h-full px-3 py-2 rounded-l-sm">
-                        <img src="/google.svg" alt="Google" className="h-6 w-6" />
-                    </div>
-                    <span className="flex-1 text-white text-base font-medium text-center py-2">Iniciar sesión con Google</span>
-                </button>
-
-                <div className="flex items-center my-4">
-                    <hr className="flex-grow border-gray-300" />
-                    <span className="mx-2 text-gray-500">o</span>
-                    <hr className="flex-grow border-gray-300" />
-                </div>
-
                 <form onSubmit={handleLogin}>
                     <div className="mb-4 relative">
                         <label htmlFor="email" className="block text-gray-700 sr-only">Dirección de correo electrónico</label>
@@ -74,9 +61,7 @@ const Login: React.FC = () => {
                             <KeyIcon className="text-gray-400" />
                         </div>
                     </div>
-                    <div className="text-center mb-4">
-                        <Link to="/forgot-password" className="text-sm text-custom-purple hover:underline">¿Has olvidado tu contraseña?</Link>
-                    </div>
+                    
                     <button type="submit" className="w-full py-2 text-white text-xl font-bold bg-custom-purple rounded-full shadow-lg hover:bg-purple-700">
                         Iniciar sesión
                     </button>
