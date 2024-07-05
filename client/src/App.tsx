@@ -7,6 +7,9 @@ import NotFound from "./pages/NotFound";
 import Register from "./pages/Register";
 import Login from "./pages/Login";
 import ForgotPassword from "./pages/ForgotPassword";
+import PublishForm from "./pages/PublishForm";
+import { LocalizationProvider } from "@mui/x-date-pickers";
+import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs'
 
 function App() {
   const router = createBrowserRouter([
@@ -27,13 +30,19 @@ function App() {
       path: PupilinkRoutes.FORGOT_PASSWORD,
       element: <ForgotPassword />,
     },
+    {
+      path: PupilinkRoutes.PUBLISH_FORM,
+      element: <PublishForm/>,
+    }
   ]);
 
   return (
     <ThemeProvider theme={DefaultTheme}>
+      <LocalizationProvider dateAdapter={AdapterDayjs}>
       <CssBaseline />
       <RouterProvider router={router} />
-    </ThemeProvider>
+      </LocalizationProvider>
+    </ThemeProvider>   
   );
 }
 

@@ -1,7 +1,6 @@
 import Model from "./Model";
 
 interface LodgingExtras extends Model {
-  internet: number;
   rooms: number;
   bathrooms: number;
   satelliteTV: boolean;
