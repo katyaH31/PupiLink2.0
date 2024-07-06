@@ -27,63 +27,71 @@ interface Location {
   description: string;
 }
 
-const  Pupi_card_grid = ({columnsPerRow}) => {
+interface Pupi_card_gridProps {
+  filters: {
+    city: string;
+    minPrice: number | null;
+    maxPrice: number | null;
+    type: string;
+  };
+}
+
+export default function Pupi_card_grid({ filters }: Pupi_card_gridProps) {
   const [lodgings, setLodgings] = useState<Lodging[]>([]);
-  const [locations, setLocations] = useState<{ [key: string]: Location }>({});
-  const [error, setError] = useState<string | null>(null);
+  const [locations, setLocations] = useState<Record<string, Location>>({});
 
   useEffect(() => {
     const fetchLodgings = async () => {
       try {
-        if (!pb.authStore.isValid) {
-          throw new Error('User not authenticated');
-        }
-
         const records = await pb.collection('lodging').getFullList<Lodging>({
           sort: '-created',
-          $autoCancel: false, 
         });
+        setLodgings(records);
+      } catch (error) {
+        console.error('Error fetching lodgings:', error);
+      }
+    };
 
-        
-        console.log('Lodgings fetched:', records);
-
-     
-        const locationIds = [...new Set(records.map(lodging => lodging.location).filter(id => id))];
-        console.log('Unique location IDs:', locationIds);
-
-     
-        const locationData = await Promise.all(locationIds.map(id => {
-          console.log('Fetching location ID:', id);
-          return pb.collection('location').getOne<Location>(id, { $autoCancel: false });
-        }));
-
-        
-        const locationDict: { [key: string]: Location } = {};
-        locationData.forEach(location => {
+    const fetchLocations = async () => {
+      try {
+        const locationRecords = await pb.collection('location').getFullList<Location>({
+          sort: '-created',
+        });
+        const locationDict: Record<string, Location> = {};
+        locationRecords.forEach(location => {
           locationDict[location.id] = location;
         });
-
         setLocations(locationDict);
-        setLodgings(records);
-      } catch (error: unknown) {
-        console.error('Error fetching lodgings or locations:', error);
-        if (error instanceof Error) {
-          setError(error.message);
-        } else {
-          setError('An unknown error occurred');
-        }
+      } catch (error) {
+        console.error('Error fetching locations:', error);
       }
     };
 
     fetchLodgings();
+    fetchLocations();
   }, []);
 
+  const filteredLodgings = lodgings.filter(lodging => {
+    if (filters.city && locations[lodging.location]?.name !== filters.city) {
+      return false;
+    }
+    if (filters.minPrice !== null && lodging.price < filters.minPrice) {
+      return false;
+    }
+    if (filters.maxPrice !== null && lodging.price > filters.maxPrice) {
+      return false;
+    }
+    if (filters.type && lodging.type !== filters.type) {
+      return false;
+    }
+    return true;
+  });
+
   return (
-    <Box sx={{ display: "flex", flexGrow: 1, padding: 3 }}>
-      {error && <p>Error: {error}</p>}
-      <Grid container spacing={3} sx={{ flexGrow: 1 }}>
-        {lodgings.map((lodging) => (
-          <Grid item xs={12} sm={columnsPerRow === 2 ? 6 : 4} key={lodging.id}>
+    <Box sx={{ display: "flex", width: '100%', padding: 3 }}>
+      <Grid container spacing={3}>
+        {filteredLodgings.map((lodging) => (
+          <Grid item xs={12} sm={6} md={4} lg={4} key={lodging.id}>
             <Pupi_Card lodging={lodging} location={locations[lodging.location]} />
           </Grid>
         ))}
@@ -92,4 +100,3 @@ const  Pupi_card_grid = ({columnsPerRow}) => {
   );
 }
 
-export default Pupi_card_grid
