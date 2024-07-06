@@ -43,13 +43,13 @@ const Register: React.FC = () => {
                     </div>
                     <div className="flex justify-between w-full mb-4">
                         <button
-                            className={`flex-1 text-center text-gray-500 border-b-2 ${selectedRole === 'Inquilino' ? 'border-purple-500' : 'border-transparent'}`}
+                            className={`flex-1 text-center text-gray-500 border-b-2 ${selectedRole === 'Inquilino' ? 'border-custom-purple' : 'border-transparent'}`}
                             onClick={() => setSelectedRole('Inquilino')}
                         >
                             Inquilino
                         </button>
                         <button
-                            className={`flex-1 text-center text-gray-500 border-b-2 ${selectedRole === 'Propietario' ? 'border-purple-500' : 'border-transparent'}`}
+                            className={`flex-1 text-center text-gray-500 border-b-2 ${selectedRole === 'Propietario' ? 'border-custom-purple' : 'border-transparent'}`}
                             onClick={() => setSelectedRole('Propietario')}
                         >
                             Propietario
@@ -60,19 +60,6 @@ const Register: React.FC = () => {
                     <img src={logo} alt="Logo" className="h-32" />
                 </div>
                 
-                
-                <button className="flex items-center w-full mb-4 bg-blue-600 rounded-md shadow-lg hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-400 focus:ring-opacity-75">
-                    <div className="flex items-center justify-center bg-white h-full px-3 py-2 rounded-l-md">
-                        <img src="/google.svg" alt="Google" className="h-6 w-6" />
-                    </div>
-                    <span className="flex-1 text-white text-base font-medium text-center py-2">Iniciar sesión con Google</span>
-                </button>
-                
-                <div className="flex items-center my-4">
-                    <hr className="flex-grow border-gray-300" />
-                    <span className="mx-2 text-gray-500">o</span>
-                    <hr className="flex-grow border-gray-300" />
-                </div>
 
                 <form onSubmit={handleRegister}>
                     <div className="mb-4 relative">
