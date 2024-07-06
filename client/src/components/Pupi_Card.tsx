@@ -6,56 +6,98 @@ import LocationOnIcon from "@mui/icons-material/LocationOn";
 import HomeIcon from "@mui/icons-material/Home";
 import AttachMoneyIcon from "@mui/icons-material/AttachMoney";
 import { Box, CardActionArea } from "@mui/material";
-export default function Pupi_Cards() {
+import pb from "../server/Connection";
+
+interface Lodging {
+  id: string;
+  title: string;
+  description: string;
+  type: string;
+  status: string;
+  price: number;
+  available: string;
+  coexistenceRules: string;
+  owner: string;
+  location: string; // this would be the id of the location
+  extras: string[];
+  image: string;
+}
+
+interface Location {
+  id: string;
+  name: string;
+  zoneId: string;
+  latitude: string;
+  longitude: string;
+  description: string;
+}
+
+interface Pupi_CardsProps {
+  lodging: Lodging;
+  location: Location;
+}
+
+export default function Pupi_Card({ lodging, location }: Pupi_CardsProps) {
+  // Construye la URL completa de la imagen usando pb.files.getUrl
+  const imageUrl = pb.files.getUrl(lodging, lodging.image);
+
   return (
     <Card sx={{ maxWidth: 310 }}>
       <CardActionArea>
-        <CardMedia
-          component="img"
-          height="200"
-          image="https://cdn-static-new.uniplaces.com/property-photos/6b632e978454153a2a9790862f8e0af166ef9f7098c04181682f996027e67d7d/x-large.jpg"
-          alt="image"
-        />
+        <Box sx={{ height: 200, overflow: 'hidden' }}>
+          <CardMedia
+            component="img"
+            sx={{ height: '100%', width: '100%', objectFit: 'cover' }}
+            image={imageUrl}
+            alt="image"
+          />
+        </Box>
         <CardContent>
-          <Box sx={{ display:"flex", alignItems:"center"}}>
-            <HomeIcon   sx={{fontSize:"20px"}} />
+          <Box sx={{ display: "flex", alignItems: "center" }}>
+            <HomeIcon sx={{ fontSize: "20px" }} />
             <Typography
-                sx={{ fontSize: "18px",
-                    fontFamily:"Barlow Condensed", 
-                    fontWeight: "bold",
-                    textAlign:"left", 
-                    marginInlineStart:"0.5rem",
-                    color:"#686D76"}}
+              sx={{
+                fontSize: "18px",
+                fontFamily: "Barlow Condensed",
+                fontWeight: "bold",
+                textAlign: "left",
+                marginInlineStart: "0.5rem",
+                color: "#686D76"
+              }}
             >
-              Habitación
+              {lodging.title}
             </Typography>
           </Box>
 
-          <Box sx={{display:"flex", alignItems:"center"}}>
-            <LocationOnIcon sx={{fontSize:"20px"}} />
+          <Box sx={{ display: "flex", alignItems: "center" }}>
+            <LocationOnIcon sx={{ fontSize: "20px" }} />
             <Typography
-                 sx={{ fontSize: "18px",
-                    fontFamily:"Barlow Condensed", 
-                    fontWeight: "bold",
-                    textAlign:"left", 
-                    marginInlineStart:"0.5rem",
-                    color:"#686D76"}}
+              sx={{
+                fontSize: "18px",
+                fontFamily: "Barlow Condensed",
+                fontWeight: "bold",
+                textAlign: "left",
+                marginInlineStart: "0.5rem",
+                color: "#686D76"
+              }}
             >
-              Colonia Loma Linda, Santa Tecla, La Libertad
+              {location?.name || 'Ubicación desconocida'}
             </Typography>
           </Box>
 
-          <Box sx={{display:"flex", alignItems:"center"}}>
-            <AttachMoneyIcon sx={{fontSize:"30px"}} />
+          <Box sx={{ display: "flex", alignItems: "center" }}>
+            <AttachMoneyIcon sx={{ fontSize: "30px" }} />
             <Typography
-                 sx={{ fontSize: "20px",
-                    fontFamily:"Barlow Condensed", 
-                    fontWeight: "bold",
-                    textAlign:"left", 
-                    marginInlineStart:"0.5rem",
-                    color:"#686D76"}}
+              sx={{
+                fontSize: "20px",
+                fontFamily: "Barlow Condensed",
+                fontWeight: "bold",
+                textAlign: "left",
+                marginInlineStart: "0.5rem",
+                color: "#686D76"
+              }}
             >
-              325
+              {lodging.price}
             </Typography>
           </Box>
         </CardContent>
