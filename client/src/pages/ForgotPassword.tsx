@@ -1,6 +1,8 @@
 import React from "react";
 import AlternateEmailIcon from '@mui/icons-material/AlternateEmail';
 
+
+// No se usa Pero si lo borro da error asi que asi que quede ninguna vista lleva a aqui 
 const ForgotPassword: React.FC = () => {
     return (
         <div className="min-h-screen flex items-center justify-center bg-gray-100 font-barlow">

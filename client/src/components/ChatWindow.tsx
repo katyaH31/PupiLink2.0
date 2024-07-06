@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import Chat from './Chat';
 import ChatList from './ChatList';
-import AccountCircleIcon from '@mui/icons-material/AccountCircle';
+
 
 const ChatWindow: React.FC = () => {
     const [isChatOpen, setIsChatOpen] = useState(false);
