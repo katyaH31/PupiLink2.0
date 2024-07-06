@@ -7,6 +7,7 @@ import NotFound from "./pages/NotFound";
 import Register from "./pages/Register";
 import Login from "./pages/Login";
 import ForgotPassword from "./pages/ForgotPassword";
+import LodgingDetails from "./pages/LodgingDetails";
 
 function App() {
   const router = createBrowserRouter([
@@ -27,6 +28,10 @@ function App() {
       path: PupilinkRoutes.FORGOT_PASSWORD,
       element: <ForgotPassword />,
     },
+    {
+      path: PupilinkRoutes.LODGING_DETAILS,
+      element: <LodgingDetails/>,
+    }
   ]);
 
   return (
