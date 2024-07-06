@@ -27,7 +27,7 @@ interface Location {
   description: string;
 }
 
-export default function Pupi_card_grid() {
+const  Pupi_card_grid = ({columnsPerRow}) => {
   const [lodgings, setLodgings] = useState<Lodging[]>([]);
   const [locations, setLocations] = useState<{ [key: string]: Location }>({});
   const [error, setError] = useState<string | null>(null);
@@ -79,11 +79,11 @@ export default function Pupi_card_grid() {
   }, []);
 
   return (
-    <Box sx={{ display: "flex", width: '100%', padding: 3 }}>
+    <Box sx={{ display: "flex", flexGrow: 1, padding: 3 }}>
       {error && <p>Error: {error}</p>}
-      <Grid container spacing={3}>
+      <Grid container spacing={3} sx={{ flexGrow: 1 }}>
         {lodgings.map((lodging) => (
-          <Grid item xs={12} sm={6} md={4} lg={4} key={lodging.id}>
+          <Grid item xs={12} sm={columnsPerRow === 2 ? 6 : 4} key={lodging.id}>
             <Pupi_Card lodging={lodging} location={locations[lodging.location]} />
           </Grid>
         ))}
@@ -91,3 +91,5 @@ export default function Pupi_card_grid() {
     </Box>
   );
 }
+
+export default Pupi_card_grid
