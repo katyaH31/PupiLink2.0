@@ -7,8 +7,8 @@ import CardContent from "@mui/material/CardContent";
 import CardMedia from "@mui/material/CardMedia";
 import Typography from "@mui/material/Typography";
 import { useNavigate } from "react-router-dom";
-import PupilinkRoutes from "../enums/PupilinkRoutes";
-import pb from "../server/Connection";
+import PupilinkRoutes from "../../enums/PupilinkRoutes";
+import pb from "../../server/Connection";
 
 interface Lodging {
   id: string;
