@@ -32,7 +32,6 @@ const Login: React.FC = () => {
                 <h2 className="text-xl font-regular text-center text-gray-500 mb-6">
                     Inicia sesión y empieza tu nueva experiencia
                 </h2>
-
                 <form onSubmit={handleLogin}>
                     <div className="mb-4 relative">
                         <label htmlFor="email" className="block text-gray-700 sr-only">Dirección de correo electrónico</label>
@@ -62,7 +61,9 @@ const Login: React.FC = () => {
                             <KeyIcon className="text-gray-400" />
                         </div>
                     </div>
-                    
+                    <div className="text-center mb-4">
+                        <Link to="/forgot-password" className="text-sm text-custom-purple hover:underline">¿Has olvidado tu contraseña?</Link>
+                    </div>
                     <button type="submit" className="w-full py-2 text-white text-xl font-bold bg-custom-purple rounded-full shadow-lg hover:bg-purple-700">
                         Iniciar sesión
                     </button>
