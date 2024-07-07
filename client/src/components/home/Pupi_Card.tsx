@@ -6,7 +6,7 @@ import LocationOnIcon from "@mui/icons-material/LocationOn";
 import HomeIcon from "@mui/icons-material/Home";
 import AttachMoneyIcon from "@mui/icons-material/AttachMoney";
 import { Box, CardActionArea } from "@mui/material";
-import pb from "../server/Connection";
+import pb from "../../server/Connection";
 
 interface Lodging {
   id: string;

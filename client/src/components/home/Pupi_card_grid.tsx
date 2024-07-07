@@ -1,7 +1,7 @@
 import { Box, Grid } from "@mui/material";
 import { useEffect, useState } from "react";
 import Pupi_Card from "./Pupi_Card";
-import pb from "../server/Connection";
+import pb from "../../server/Connection";
 
 interface Lodging {
   id: string;
