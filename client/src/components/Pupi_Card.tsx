@@ -53,15 +53,14 @@ export default function Pupi_Card({ lodging, location }: Pupi_CardsProps) {
           />
         </Box>
         <CardContent>
-          <Box sx={{ display: "flex", alignItems: "center" }}>
-            <HomeIcon sx={{ fontSize: "20px" }} />
+          <Box sx={{ display: "flex", alignItems: "center", marginBottom: 1 }}>
+            <HomeIcon sx={{ fontSize: "20px", marginRight: "0.5rem" }} />
             <Typography
               sx={{
                 fontSize: "18px",
                 fontFamily: "Barlow Condensed",
                 fontWeight: "bold",
                 textAlign: "left",
-                marginInlineStart: "0.5rem",
                 color: "#686D76"
               }}
             >
@@ -69,15 +68,14 @@ export default function Pupi_Card({ lodging, location }: Pupi_CardsProps) {
             </Typography>
           </Box>
 
-          <Box sx={{ display: "flex", alignItems: "center" }}>
-            <LocationOnIcon sx={{ fontSize: "20px" }} />
+          <Box sx={{ display: "flex", alignItems: "center", marginBottom: 1 }}>
+            <LocationOnIcon sx={{ fontSize: "20px", marginRight: "0.5rem" }} />
             <Typography
               sx={{
                 fontSize: "18px",
                 fontFamily: "Barlow Condensed",
                 fontWeight: "bold",
                 textAlign: "left",
-                marginInlineStart: "0.5rem",
                 color: "#686D76"
               }}
             >
@@ -86,14 +84,13 @@ export default function Pupi_Card({ lodging, location }: Pupi_CardsProps) {
           </Box>
 
           <Box sx={{ display: "flex", alignItems: "center" }}>
-            <AttachMoneyIcon sx={{ fontSize: "30px" }} />
+            <AttachMoneyIcon sx={{ fontSize: "20px", marginRight: "0.5rem" }} />
             <Typography
               sx={{
                 fontSize: "20px",
                 fontFamily: "Barlow Condensed",
                 fontWeight: "bold",
                 textAlign: "left",
-                marginInlineStart: "0.5rem",
                 color: "#686D76"
               }}
             >

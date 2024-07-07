@@ -7,6 +7,9 @@ import NotFound from "./pages/NotFound";
 import Register from "./pages/Register";
 import Login from "./pages/Login";
 import ForgotPassword from "./pages/ForgotPassword";
+import PublishForm from "./pages/PublishForm";
+import { LocalizationProvider } from "@mui/x-date-pickers";
+import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs'
 import LodgingMap from "./pages/LodgingMap";
 
 function App() {
@@ -29,16 +32,22 @@ function App() {
       element: <ForgotPassword />,
     },
     {
+      path: PupilinkRoutes.PUBLISH_FORM,
+      element: <PublishForm/>,
+    },
+    {
       path: PupilinkRoutes.LODGING_MAP,
       element: <LodgingMap />,
-    }
+    },
   ]);
 
   return (
     <ThemeProvider theme={DefaultTheme}>
+      <LocalizationProvider dateAdapter={AdapterDayjs}>
       <CssBaseline />
       <RouterProvider router={router} />
-    </ThemeProvider>
+      </LocalizationProvider>
+    </ThemeProvider>   
   );
 }
 
