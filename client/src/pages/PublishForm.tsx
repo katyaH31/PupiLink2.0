@@ -11,6 +11,7 @@ import PetsIcon from "@mui/icons-material/Pets";
 import SecurityIcon from "@mui/icons-material/Security";
 import TvIcon from "@mui/icons-material/Tv";
 import WifiOutlinedIcon from "@mui/icons-material/WifiOutlined";
+import "leaflet/dist/leaflet.css";
 import {
   Box,
   Divider,
@@ -41,6 +42,7 @@ import { PublishLodgingRequest, PublishLodgingSchema } from "../utils/PublishLod
 import LodgingService from '../services/LodgingService';
 import { useNavigate } from 'react-router-dom';
 import PupilinkRoutes from '../enums/PupilinkRoutes';
+import { MapContainer, TileLayer } from "react-leaflet";
 
 const formTitleStyle: SxProps = {
   fontFamily: "Barlow Condensed, Arial",
@@ -160,7 +162,13 @@ const PublishForm = () => {
   });
   return (
     //Grid father:
-    <Grid component={"form"} onSubmit={handleSubmit(onSubmit)} sx={{ bgcolor: "#F5F5F5", width:"98%", marginInline: "auto", my: 2}} container spacing={1}>
+    <Grid
+      component={"form"}
+      onSubmit={handleSubmit(onSubmit)}
+      sx={{ bgcolor: "#F5F5F5", width: "98%", marginInline: "auto", my: 2 }}
+      container
+      spacing={1}
+    >
       {/*Grid child 1:*/}
       <Grid item xs={6}>
         <Stack>
@@ -234,7 +242,7 @@ const PublishForm = () => {
                     id="outlined-basic"
                     variant="outlined"
                     sx={{
-                      '& .MuiOutlinedInput-root': { bgcolor: "#dcdce8" },
+                      "& .MuiOutlinedInput-root": { bgcolor: "#dcdce8" },
                       fontFamily: "Barlow Condensed, Arial",
                       "& > *": { paddingLeft: "0px !important" },
                     }}
@@ -245,7 +253,10 @@ const PublishForm = () => {
                       type: "number",
                       startAdornment: (
                         <InputAdornment
-                          sx={{ color: "#865DFF", paddingLeft: "0.5rem !important" }}
+                          sx={{
+                            color: "#865DFF",
+                            paddingLeft: "0.5rem !important",
+                          }}
                           position="start"
                         >
                           <AttachMoneyIcon />
@@ -253,7 +264,7 @@ const PublishForm = () => {
                       ),
                     }}
                   />
-                )
+                );
               }}
             />
           </Box>
@@ -276,7 +287,10 @@ const PublishForm = () => {
                     slots={{
                       openPickerIcon: () => (
                         <CalendarMonthIcon
-                          sx={{ color: "#865DFF", "&:hover": { color: "#571FFF" } }}
+                          sx={{
+                            color: "#865DFF",
+                            "&:hover": { color: "#571FFF" },
+                          }}
                         />
                       ),
                     }}
@@ -298,12 +312,12 @@ const PublishForm = () => {
                           "& > *": {
                             paddingBlock: "0.25rem !important",
                           },
-                          '& .MuiOutlinedInput-root': { bgcolor: "#dcdce8" },
+                          "& .MuiOutlinedInput-root": { bgcolor: "#dcdce8" },
                         },
                       },
                     }}
                   />
-                )
+                );
               }}
             />
           </Box>
@@ -370,7 +384,10 @@ const PublishForm = () => {
                   <Typography sx={extraTitleStyle}>Jardín</Typography>
                 </Box>
                 <Box sx={extraParentBoxStyle}>
-                  <CheckboxInput name="extras.cleaningService" control={control} />
+                  <CheckboxInput
+                    name="extras.cleaningService"
+                    control={control}
+                  />
                   <Box sx={extraChildBoxStyle}>
                     <Box
                       component={"img"}
@@ -406,7 +423,10 @@ const PublishForm = () => {
                 </Box>
               </Box>
               <Box sx={extraParentBoxStyle}>
-                <CheckboxInput name="extras.privateSecurity" control={control} />
+                <CheckboxInput
+                  name="extras.privateSecurity"
+                  control={control}
+                />
                 <Box sx={extraChildBoxStyle}>
                   <SecurityIcon sx={{ color: "#865DFF" }} />
                   <Typography sx={extraTitleStyle}>
@@ -418,7 +438,9 @@ const PublishForm = () => {
             <Stack>
               {/* Numeric extras: */}
               <Stack>
-                <Typography sx={formTitleStyle}>Velocidad de internet</Typography>
+                <Typography sx={formTitleStyle}>
+                  Velocidad de internet
+                </Typography>
                 <Box sx={{ display: "flex", alignItems: "center" }}>
                   <NumericInput
                     name="extras.internet"
@@ -428,7 +450,9 @@ const PublishForm = () => {
                 </Box>
               </Stack>
               <Stack>
-                <Typography sx={formTitleStyle}>Cantidad de habitaciones</Typography>
+                <Typography sx={formTitleStyle}>
+                  Cantidad de habitaciones
+                </Typography>
                 <Box sx={{ display: "flex", alignItems: "center" }}>
                   <NumericInput
                     name="extras.rooms"
@@ -440,7 +464,18 @@ const PublishForm = () => {
               <Stack>
                 <Typography sx={formTitleStyle}>Cantidad de baños</Typography>
                 <Box sx={{ display: "flex", alignItems: "center" }}>
-                  <NumericInput name="extras.bathrooms" control={control} icon={<Box component={"img"} src={ToiletIcon} alt="Toilet icon" sx={{ width: "18px", height: "18px" }} />} />
+                  <NumericInput
+                    name="extras.bathrooms"
+                    control={control}
+                    icon={
+                      <Box
+                        component={"img"}
+                        src={ToiletIcon}
+                        alt="Toilet icon"
+                        sx={{ width: "18px", height: "18px" }}
+                      />
+                    }
+                  />
                 </Box>
               </Stack>
             </Stack>
@@ -452,7 +487,7 @@ const PublishForm = () => {
               </Typography>
               {!image ? (
                 <Box
-                  {...getRootProps({ className: 'dropzone' })}
+                  {...getRootProps({ className: "dropzone" })}
                   sx={{
                     bgcolor: "#D9D9D9",
                     width: "100px",
@@ -466,7 +501,9 @@ const PublishForm = () => {
                   }}
                 >
                   <Box component={"input"} {...getInputProps()} />
-                  <Stack sx={{ justifyContent: "center", alignItems: "center" }}>
+                  <Stack
+                    sx={{ justifyContent: "center", alignItems: "center" }}
+                  >
                     <Box
                       component={"img"}
                       src={addImageIcon}
@@ -476,46 +513,92 @@ const PublishForm = () => {
                     <Typography
                       sx={{ ...formDescriptionStyle, fontSize: "0.75rem" }}
                     >
-                      Arrastre o suba aqui la fotografia de su espacio , formatos
-                      permitidos PNG,JPG
+                      Arrastre o suba aqui la fotografia de su espacio ,
+                      formatos permitidos PNG,JPG
                     </Typography>
-                    {!!errors.image && <Typography sx={{ color: '#d32f2f', fontSize: '0.75rem' }}>{`${errors.image.message}` ?? 'La imagen es obligatoria  '}</Typography>}
+                    {!!errors.image && (
+                      <Typography
+                        sx={{ color: "#d32f2f", fontSize: "0.75rem" }}
+                      >
+                        {`${errors.image.message}` ??
+                          "La imagen es obligatoria  "}
+                      </Typography>
+                    )}
                   </Stack>
                 </Box>
               ) : (
-                <Box sx={{
-                  width: "100px",
-                  minWidth: "480px !important",
-                  maxHeight: "330px",
-                  borderRadius: "10px",
-                  mt: 1,
-                  position: "relative",
-                }}>
-                  <IconButton onClick={clearImage} sx={{backgroundColor: 'rgba(0,0,0, 0.45)', position: 'absolute', top: '5px', right: '5px'}}>
-                    <ClearIcon sx={{color: 'white'}}/>
+                <Box
+                  sx={{
+                    width: "100px",
+                    minWidth: "480px !important",
+                    maxHeight: "330px",
+                    borderRadius: "10px",
+                    mt: 1,
+                    position: "relative",
+                  }}
+                >
+                  <IconButton
+                    onClick={clearImage}
+                    sx={{
+                      backgroundColor: "rgba(0,0,0, 0.45)",
+                      position: "absolute",
+                      top: "5px",
+                      right: "5px",
+                    }}
+                  >
+                    <ClearIcon sx={{ color: "white" }} />
                   </IconButton>
-                  <Box component={"img"} src={`${image}`} sx={{ width: "100%", height: "auto", maxHeight: '300px', borderRadius: '10px', objectFit: 'cover', objectPosition: 'center' }}/>
+                  <Box
+                    component={"img"}
+                    src={`${image}`}
+                    sx={{
+                      width: "100%",
+                      height: "auto",
+                      maxHeight: "300px",
+                      borderRadius: "10px",
+                      objectFit: "cover",
+                      objectPosition: "center",
+                    }}
+                  />
                 </Box>
-              )
-              }
+              )}
             </Stack>
           </Stack>
         </Box>
       </Grid>
 
       {/*Grid child 3:*/}
-      <Grid item xs={12}>
-        <Stack>
-          <Typography sx={formDescriptionStyle}>
-            En el siguiente visor de mapa le pedimos que marque de la manera más
-            certera posible la localización del lugar que desea publicar
-          </Typography>
-        </Stack>
+      <Grid container spacing={2} sx={{ height: "100vh" }}>
+        <Grid item xs={12}>
+          <Stack>
+            <Typography sx={formDescriptionStyle}>
+              En el siguiente visor de mapa le pedimos que marque de la manera
+              más certera posible la localización del lugar que desea publicar
+            </Typography>
+          </Stack>
+        </Grid>
+        <Grid item xs={12} sx={{ height: "calc(100vh - 64px)" }}>
+          {" "}
+          {/* Ajusta la altura según sea necesario */}
+          <MapContainer
+            center={[13.6989, -89.1914]}
+            zoom={9}
+            style={{ height: "100%", width: "100%" }}
+          >
+            <TileLayer
+              url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+              attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+            />
+          </MapContainer>
+        </Grid>
       </Grid>
-      <Grid item xs={12} sx={{ display: 'flex', justifyContent: 'center', my: 2 }}>
-        <PupilinkButton type="submit">
-          Publicar pupilaje
-        </PupilinkButton>
+
+      <Grid
+        item
+        xs={12}
+        sx={{ display: "flex", justifyContent: "center", my: 2 }}
+      >
+        <PupilinkButton type="submit">Publicar pupilaje</PupilinkButton>
       </Grid>
     </Grid>
   );

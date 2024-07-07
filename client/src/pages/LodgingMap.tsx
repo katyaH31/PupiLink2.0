@@ -1,6 +1,6 @@
 import { Box } from "@mui/material";
 import React from "react";
-import Pupi_card_grid from "../components/Pupi_card_grid";
+import Pupi_card_grid from "../components/home/Pupi_card_grid";
 import "leaflet/dist/leaflet.css";
 import { MapContainer, TileLayer, Marker, Popup } from "react-leaflet";
 import { useEffect, useState } from "react";

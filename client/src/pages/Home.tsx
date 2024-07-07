@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import ChatWindow from '../components/ChatWindow';
-import Pupi_card_grid from '../components/Pupi_card_grid';
-import Filter_bar from '../components/Filter_bar';
+import Pupi_card_grid from '../components/home/Pupi_card_grid';
+import Filter_bar from '../components/home/Filter_bar';
 import { Box, Typography } from "@mui/material";
 
 interface Filters {
