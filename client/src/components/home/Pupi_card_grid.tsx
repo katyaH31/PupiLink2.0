@@ -1,7 +1,7 @@
 import { Box, Grid } from "@mui/material";
 import { useEffect, useState } from "react";
 import Pupi_Card from "./Pupi_Card";
-import pb from "../server/Connection";
+import pb from "../../server/Connection";
 
 interface Lodging {
   id: string;
@@ -81,7 +81,7 @@ export default function Pupi_card_grid({ filters }: Pupi_card_gridProps) {
     if (filters.maxPrice !== null && lodging.price > filters.maxPrice) {
       return false;
     }
-    if (filters.type && lodging.type !== filters.type) {
+    if (filters.type && lodging.type != filters.type) {
       return false;
     }
     return true;

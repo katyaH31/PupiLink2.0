@@ -5,3 +5,5 @@ enum LodgingStatus {
   UNAVAILABLE = 'UNAVAILABLE',
   UNDER_MAINTENANCE = 'UNDER_MAINTENANCE',
 }
+
+export default LodgingStatus;
