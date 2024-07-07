@@ -1,4 +1,6 @@
+import LodgingStatus from "../enums/LodgingStatus";
 import LodgingType from "../enums/LodgingType";
+import Location from "./Location";
 import LodgingExtras from "./LodgingExtras";
 import Model from "./Model";
 import User from "./User";
@@ -18,6 +20,7 @@ interface Lodging extends Model {
   available: Date;
   coexistenceRules: string;
   expand?: LodgingExpand;
+  image: string;
 }
 
 export default Lodging;
