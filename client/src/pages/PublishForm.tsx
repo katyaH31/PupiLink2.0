@@ -1,3 +1,5 @@
+import ClearIcon from '@mui/icons-material/Clear';
+import { zodResolver } from "@hookform/resolvers/zod";
 import AttachMoneyIcon from "@mui/icons-material/AttachMoney";
 import CalendarMonthIcon from "@mui/icons-material/CalendarMonth";
 import ChairIcon from "@mui/icons-material/Chair";
@@ -11,26 +13,34 @@ import TvIcon from "@mui/icons-material/Tv";
 import WifiOutlinedIcon from "@mui/icons-material/WifiOutlined";
 import {
   Box,
-  Checkbox,
   Divider,
-  FormControlLabel,
   Grid,
+  IconButton,
   InputAdornment,
-  Radio,
-  RadioGroup,
   Stack,
   SxProps,
   TextField,
-  Typography,
+  Typography
 } from "@mui/material";
 import { DatePicker } from "@mui/x-date-pickers";
-import { useCallback } from "react";
+import { useCallback, useState } from "react";
 import { useDropzone } from "react-dropzone";
+import { Controller, useForm } from "react-hook-form";
 import addImageIcon from "../assets/addImage.svg";
 import SprayBottleIcon from "../assets/sprayBottle.svg";
 import ToiletIcon from "../assets/toilet.svg";
+import PupilinkButton from "../components/PupilinkButton";
+import CheckboxInput from "../components/form/CheckboxInput";
+import NumericInput from "../components/form/NumericInput";
+import RadioGroupInput, { RadioGroupType } from "../components/form/RadioGroupInput";
+import TextInput from "../components/form/TextInput";
 import LodgingStatus from "../enums/LodgingStatus";
 import LodgingType from "../enums/LodgingType";
+import FormUtils from "../utils/FormUtils";
+import { PublishLodgingRequest, PublishLodgingSchema } from "../utils/PublishLodgingSchema";
+import LodgingService from '../services/LodgingService';
+import { useNavigate } from 'react-router-dom';
+import PupilinkRoutes from '../enums/PupilinkRoutes';
 
 const formTitleStyle: SxProps = {
   fontFamily: "Barlow Condensed, Arial",
@@ -73,43 +83,84 @@ const extraChildBoxStyle: SxProps = {
   mr: 5,
 };
 
-const extraCheckoutStyle: SxProps = {
-  color: "#865DFF",
-  "&.Mui-checked": {
-    color: "#571FFF",
+const lodgingStatusRadioOptions: RadioGroupType<LodgingStatus>[] = [
+  {
+    name: "Disponible",
+    value: LodgingStatus.AVAILABLE,
   },
-};
+  {
+    name: "Reservado",
+    value: LodgingStatus.BOOKED,
+  },
+  {
+    name: "Alquilado",
+    value: LodgingStatus.RENTED,
+  },
+  {
+    name: "No disponible",
+    value: LodgingStatus.UNAVAILABLE,
+  },
+  {
+    name: "En mantenimiento",
+    value: LodgingStatus.UNDER_MAINTENANCE,
+  }
+];
 
-const groupBoxStatusStyle: SxProps = {
-  "& label > span": {
-    fontFamily: "Barlow Condensed, Arial",
-    fontSize: "0.85rem !important",
-    color: "#686D76",
-    fontWeight: "400",
-    paddingInline: "0px !important",
-    paddingLeft: "1px !important",
+const lodgingTypeRadioOptions: RadioGroupType<LodgingType>[] = [
+  {
+    name: "Apartamento",
+    value: LodgingType.APARTMENT,
   },
-  "& .MuiSvgIcon-root": {
-    fontSize: 20,
+  {
+    name: "Estudio",
+    value: LodgingType.STUDIO,
   },
-  "& .MuiFormControlLabel-label": {
-    fontSize: "0.85rem !important",
+  {
+    name: "Casa",
+    value: LodgingType.HOUSE,
   },
-};
+  {
+    name: "Habitación",
+    value: LodgingType.ROOM,
+  },
+  {
+    name: "Residencial Estudiantil",
+    value: LodgingType.STUDENT_RESIDENCE,
+  },
+]
 
 const PublishForm = () => {
-  const onDrop = useCallback((acceptedFiles: File[]) => {
-    // Do something with the
-    console.log("acceptedFiles", acceptedFiles);
-  }, []);
+  const [image, setImage] = useState<string | null>(null);
+  const { handleSubmit, control, setValue, formState: { errors } } = useForm<PublishLodgingRequest>({ resolver: zodResolver(PublishLodgingSchema) });
+  const navigate = useNavigate();
 
-  const { getRootProps, getInputProps, isDragActive } = useDropzone({
+  const clearImage = () => {
+    setImage(null);
+    setValue("image", null);
+  }
+
+  const onSubmit = async (data: PublishLodgingRequest) => {
+    const response = await LodgingService.createLodging(data);
+    navigate(PupilinkRoutes.ROOT);
+  };
+
+  const onDrop = useCallback((acceptedFiles: File[]) => {
+    const file = acceptedFiles[0];
+    setValue("image", file);
+    const reader = new FileReader();
+    reader.onload = () => {
+      setImage(reader.result as string);
+    };
+    reader.readAsDataURL(file);
+  }, [setValue]);
+
+  const { getRootProps, getInputProps } = useDropzone({
     onDrop,
     multiple: false,
   });
   return (
     //Grid father:
-    <Grid sx={{ bgcolor: "#F5F5F5" }} container spacing={1}>
+    <Grid component={"form"} onSubmit={handleSubmit(onSubmit)} sx={{ bgcolor: "#F5F5F5" }} container spacing={1}>
       {/*Grid child 1:*/}
       <Grid item xs={6}>
         <Stack>
@@ -129,15 +180,7 @@ const PublishForm = () => {
             Agrega un título corto a tu publicación para que sea fácil de leer
             para los interesados
           </Typography>
-          <TextField
-            size="small"
-            id="outlined-basic"
-            variant="outlined"
-            sx={{ bgcolor: "#dcdce8", fontFamily: "Barlow Condensed, Arial" }}
-            inputProps={{
-              style: { fontSize: "0.88rem", paddingBlock: "0.25rem" },
-            }}
-          />
+          <TextInput name="title" control={control} />
         </Stack>
         <Stack>
           <Typography sx={formTitleStyle}>Descripción</Typography>
@@ -145,17 +188,7 @@ const PublishForm = () => {
             Agrega una descripción conciza del espacio que estas dando en
             alquiler
           </Typography>
-          <TextField
-            size="small"
-            id="outlined-basic"
-            variant="outlined"
-            multiline
-            maxRows={5}
-            sx={{ bgcolor: "#dcdce8", fontFamily: "Barlow Condensed, Arial" }}
-            inputProps={{
-              style: { fontSize: "0.88rem", paddingBlock: "0.25rem" },
-            }}
-          />
+          <TextInput name="description" control={control} />
         </Stack>
         <Stack>
           <Typography sx={formTitleStyle}>Tipo</Typography>
@@ -163,33 +196,11 @@ const PublishForm = () => {
             Selecciona el tipo de lugar según nuestras categorias ya
             establecidas
           </Typography>
-          <RadioGroup row sx={groupBoxStatusStyle}>
-            <FormControlLabel
-              value={LodgingType.APARTMENT}
-              control={<Radio />}
-              label="Apartamento"
-            />
-            <FormControlLabel
-              value={LodgingType.STUDIO}
-              control={<Radio />}
-              label="Estudio"
-            />
-            <FormControlLabel
-              value={LodgingType.HOUSE}
-              control={<Radio />}
-              label="Casa"
-            />
-            <FormControlLabel
-              value={LodgingType.ROOM}
-              control={<Radio />}
-              label="Habitación"
-            />
-            <FormControlLabel
-              value={LodgingType.STUDENT_RESIDENCE}
-              control={<Radio />}
-              label="Residencial Estudiantil"
-            />
-          </RadioGroup>
+          <RadioGroupInput
+            control={control}
+            name="type"
+            options={lodgingTypeRadioOptions}
+          />
         </Stack>
         <Stack>
           <Typography sx={formTitleStyle}>Estado</Typography>
@@ -197,33 +208,11 @@ const PublishForm = () => {
             Selecciona el estado de disponibilidad con el que cuenta actualmente
             el lugar que estas dando en alquiler
           </Typography>
-          <RadioGroup row sx={groupBoxStatusStyle}>
-            <FormControlLabel
-              value={LodgingStatus.AVAILABLE}
-              control={<Radio />}
-              label="Disponible"
-            />
-            <FormControlLabel
-              value={LodgingStatus.BOOKED}
-              control={<Radio />}
-              label="Reservado"
-            />
-            <FormControlLabel
-              value={LodgingStatus.RENTED}
-              control={<Radio />}
-              label="Alquilado"
-            />
-            <FormControlLabel
-              value={LodgingStatus.UNAVAILABLE}
-              control={<Radio />}
-              label="No Disponible"
-            />
-            <FormControlLabel
-              value={LodgingStatus.UNDER_MAINTENANCE}
-              control={<Radio />}
-              label="En Mantenimiento"
-            />
-          </RadioGroup>
+          <RadioGroupInput
+            control={control}
+            name="status"
+            options={lodgingStatusRadioOptions}
+          />
         </Stack>
         <Stack>
           <Typography sx={formTitleStyle}>Precio</Typography>
@@ -231,28 +220,40 @@ const PublishForm = () => {
             Indica el precio por el cual vas a alquilar el lugar
           </Typography>
           <Box sx={{ display: "flex", alignItems: "center" }}>
-            <TextField
-              size="small"
-              id="outlined-basic"
-              variant="outlined"
-              sx={{
-                bgcolor: "#dcdce8",
-                fontFamily: "Barlow Condensed, Arial",
-                "& > *": { paddingLeft: "0px !important" },
-              }}
-              inputProps={{
-                sx: { fontSize: "0.88rem", paddingBlock: "0.25rem" },
-              }}
-              InputProps={{
-                type: "number",
-                startAdornment: (
-                  <InputAdornment
-                    sx={{ color: "#865DFF", paddingLeft: "0.5rem !important" }}
-                    position="start"
-                  >
-                    <AttachMoneyIcon />
-                  </InputAdornment>
-                ),
+            <Controller
+              name="price"
+              control={control}
+              render={({ field, formState: { errors } }) => {
+                const formError = FormUtils.getFormError("price", errors);
+                return (
+                  <TextField
+                    {...field}
+                    error={!!formError}
+                    helperText={formError}
+                    size="small"
+                    id="outlined-basic"
+                    variant="outlined"
+                    sx={{
+                      '& .MuiOutlinedInput-root': { bgcolor: "#dcdce8" },
+                      fontFamily: "Barlow Condensed, Arial",
+                      "& > *": { paddingLeft: "0px !important" },
+                    }}
+                    inputProps={{
+                      sx: { fontSize: "0.88rem", paddingBlock: "0.25rem" },
+                    }}
+                    InputProps={{
+                      type: "number",
+                      startAdornment: (
+                        <InputAdornment
+                          sx={{ color: "#865DFF", paddingLeft: "0.5rem !important" }}
+                          position="start"
+                        >
+                          <AttachMoneyIcon />
+                        </InputAdornment>
+                      ),
+                    }}
+                  />
+                )
               }}
             />
           </Box>
@@ -264,32 +265,45 @@ const PublishForm = () => {
             alquiler
           </Typography>
           <Box sx={{ display: "flex", alignItems: "center" }}>
-            <DatePicker
-              slots={{
-                openPickerIcon: () => (
-                  <CalendarMonthIcon
-                    sx={{ color: "#865DFF", "&:hover": { color: "#571FFF" } }}
+            <Controller
+              name="available"
+              control={control}
+              render={({ field, formState: { errors } }) => {
+                const formError = FormUtils.getFormError("available", errors);
+                return (
+                  <DatePicker
+                    {...field}
+                    slots={{
+                      openPickerIcon: () => (
+                        <CalendarMonthIcon
+                          sx={{ color: "#865DFF", "&:hover": { color: "#571FFF" } }}
+                        />
+                      ),
+                    }}
+                    slotProps={{
+                      inputAdornment: {
+                        position: "start",
+                      },
+                      textField: {
+                        size: "small",
+                        error: !!formError,
+                        helperText: formError,
+                        sx: {
+                          "& *": {
+                            fontSize: "0.88rem !important",
+                            paddingBlock: "0rem !important",
+                          },
+
+                          fontFamily: "Barlow Condensed, Arial",
+                          "& > *": {
+                            paddingBlock: "0.25rem !important",
+                          },
+                          '& .MuiOutlinedInput-root': { bgcolor: "#dcdce8" },
+                        },
+                      },
+                    }}
                   />
-                ),
-              }}
-              slotProps={{
-                inputAdornment: {
-                  position: "start",
-                },
-                textField: {
-                  size: "small",
-                  sx: {
-                    "& *": {
-                      fontSize: "0.88rem !important",
-                      paddingBlock: "0rem !important",
-                    },
-                    bgcolor: "#dcdce8",
-                    fontFamily: "Barlow Condensed, Arial",
-                    "& > *": {
-                      paddingBlock: "0.25rem !important",
-                    },
-                  },
-                },
+                )
               }}
             />
           </Box>
@@ -301,17 +315,7 @@ const PublishForm = () => {
             normas que quieras que los inquilinos sepan si es que desean mudarse
             al lugar que estas dando en alquiler
           </Typography>
-          <TextField
-            size="small"
-            id="outlined-basic"
-            variant="outlined"
-            multiline
-            maxRows={5}
-            sx={{ bgcolor: "#dcdce8", fontFamily: "Barlow Condensed, Arial" }}
-            inputProps={{
-              style: { fontSize: "0.88rem", paddingBlock: "0.25rem" },
-            }}
-          />
+          <TextInput name="coexistenceRules" control={control} multiline />
         </Stack>
         <Stack>
           <Typography sx={formTitleStyle}>Dirección</Typography>
@@ -319,17 +323,7 @@ const PublishForm = () => {
             En la siguiente seccion coloque la dirección exacta del lugar que
             esta dando en alquiler
           </Typography>
-          <TextField
-            size="small"
-            id="outlined-basic"
-            variant="outlined"
-            multiline
-            maxRows={5}
-            sx={{ bgcolor: "#dcdce8", fontFamily: "Barlow Condensed, Arial" }}
-            inputProps={{
-              style: { fontSize: "0.88rem", paddingBlock: "0.25rem" },
-            }}
-          />
+          <TextInput name="location" control={control} multiline />
         </Stack>
       </Grid>
       {/*Grid child 2:*/}
@@ -356,27 +350,27 @@ const PublishForm = () => {
             </Typography>
             <Box display={"flex"} flexWrap={"wrap"}>
               <Box sx={extraParentBoxStyle}>
-                <Checkbox sx={extraCheckoutStyle} />
+                <CheckboxInput name="extras.petFriendly" control={control} />
                 <Box sx={extraChildBoxStyle}>
                   <PetsIcon sx={{ color: "#865DFF" }} />
                   <Typography sx={extraTitleStyle}>Mascotas</Typography>
                 </Box>
               </Box>
               <Box sx={extraParentBoxStyle}>
-                <Checkbox sx={extraCheckoutStyle} />
+                <CheckboxInput name="extras.commonAreas" control={control} />
                 <Box sx={extraChildBoxStyle}>
                   <ChairIcon sx={{ color: "#865DFF" }} />
                   <Typography sx={extraTitleStyle}>Sala Compartida</Typography>
                 </Box>
               </Box>
               <Box sx={extraParentBoxStyle}>
-                <Checkbox sx={extraCheckoutStyle} />
+                <CheckboxInput name="extras.yard" control={control} />
                 <Box sx={extraChildBoxStyle}>
                   <LocalFloristIcon sx={{ color: "#865DFF" }} />
                   <Typography sx={extraTitleStyle}>Jardín</Typography>
                 </Box>
                 <Box sx={extraParentBoxStyle}>
-                  <Checkbox sx={extraCheckoutStyle} />
+                  <CheckboxInput name="extras.cleaningService" control={control} />
                   <Box sx={extraChildBoxStyle}>
                     <Box
                       component={"img"}
@@ -391,28 +385,28 @@ const PublishForm = () => {
                 </Box>
               </Box>
               <Box sx={extraParentBoxStyle}>
-                <Checkbox sx={extraCheckoutStyle} />
+                <CheckboxInput name="extras.satelliteTV" control={control} />
                 <Box sx={extraChildBoxStyle}>
                   <TvIcon sx={{ color: "#865DFF" }} />
                   <Typography sx={extraTitleStyle}>TV Satelital</Typography>
                 </Box>
               </Box>
               <Box sx={extraParentBoxStyle}>
-                <Checkbox sx={extraCheckoutStyle} />
+                <CheckboxInput name="extras.laundryService" control={control} />
                 <Box sx={extraChildBoxStyle}>
                   <LocalLaundryServiceIcon sx={{ color: "#865DFF" }} />
                   <Typography sx={extraTitleStyle}>Lavanderia</Typography>
                 </Box>
               </Box>
               <Box sx={extraParentBoxStyle}>
-                <Checkbox sx={extraCheckoutStyle} />
+                <CheckboxInput name="extras.parkingLot" control={control} />
                 <Box sx={extraChildBoxStyle}>
                   <DirectionsCarIcon sx={{ color: "#865DFF" }} />
                   <Typography sx={extraTitleStyle}>Estacionamiento</Typography>
                 </Box>
               </Box>
               <Box sx={extraParentBoxStyle}>
-                <Checkbox sx={extraCheckoutStyle} />
+                <CheckboxInput name="extras.privateSecurity" control={control} />
                 <Box sx={extraChildBoxStyle}>
                   <SecurityIcon sx={{ color: "#865DFF" }} />
                   <Typography sx={extraTitleStyle}>
@@ -426,97 +420,27 @@ const PublishForm = () => {
               <Stack>
                 <Typography sx={formTitleStyle}>Velocidad de internet</Typography>
                 <Box sx={{ display: "flex", alignItems: "center" }}>
-                  <TextField
-                    size="small"
-                    id="outlined-basic"
-                    variant="outlined"
-                    sx={{
-                      bgcolor: "#dcdce8",
-                      fontFamily: "Barlow Condensed, Arial",
-                      "& > *": { paddingLeft: "0px !important" },
-                    }}
-                    inputProps={{
-                      sx: { fontSize: "0.88rem", paddingBlock: "0.25rem" },
-                    }}
-                    InputProps={{
-                      type: "number",
-                      startAdornment: (
-                        <InputAdornment
-                          sx={{
-                            color: "#865DFF",
-                            paddingLeft: "0.5rem !important",
-                          }}
-                          position="start"
-                        >
-                          <WifiOutlinedIcon />
-                        </InputAdornment>
-                      ),
-                    }}
+                  <NumericInput
+                    name="extras.internet"
+                    control={control}
+                    icon={<WifiOutlinedIcon />}
                   />
                 </Box>
               </Stack>
               <Stack>
                 <Typography sx={formTitleStyle}>Cantidad de habitaciones</Typography>
                 <Box sx={{ display: "flex", alignItems: "center" }}>
-                  <TextField
-                    size="small"
-                    id="outlined-basic"
-                    variant="outlined"
-                    sx={{
-                      bgcolor: "#dcdce8",
-                      fontFamily: "Barlow Condensed, Arial",
-                      "& > *": { paddingLeft: "0px !important" },
-                    }}
-                    inputProps={{
-                      sx: { fontSize: "0.88rem", paddingBlock: "0.25rem" },
-                    }}
-                    InputProps={{
-                      type: "number",
-                      startAdornment: (
-                        <InputAdornment
-                          sx={{
-                            color: "#865DFF",
-                            paddingLeft: "0.5rem !important",
-                          }}
-                          position="start"
-                        >
-                          <HotelIcon />
-                        </InputAdornment>
-                      ),
-                    }}
+                  <NumericInput
+                    name="extras.rooms"
+                    control={control}
+                    icon={<HotelIcon />}
                   />
                 </Box>
               </Stack>
               <Stack>
                 <Typography sx={formTitleStyle}>Cantidad de baños</Typography>
                 <Box sx={{ display: "flex", alignItems: "center" }}>
-                  <TextField
-                    size="small"
-                    id="outlined-basic"
-                    variant="outlined"
-                    sx={{
-                      bgcolor: "#dcdce8",
-                      fontFamily: "Barlow Condensed, Arial",
-                      "& > *": { paddingLeft: "0px !important" },
-                    }}
-                    inputProps={{
-                      sx: { fontSize: "0.88rem", paddingBlock: "0.25rem" },
-                    }}
-                    InputProps={{
-                      type: "number",
-                      startAdornment: (
-                        <InputAdornment
-                          sx={{
-                            color: "#865DFF",
-                            paddingLeft: "0.5rem !important",
-                          }}
-                          position="start"
-                        >
-                          <Box component={"img"} src={ToiletIcon} alt="Toilet icon" sx={{width: "18px", height: "18px"}}/>
-                        </InputAdornment>
-                      ),
-                    }}
-                  />
+                  <NumericInput name="extras.bathrooms" control={control} icon={<Box component={"img"} src={ToiletIcon} alt="Toilet icon" sx={{ width: "18px", height: "18px" }} />} />
                 </Box>
               </Stack>
             </Stack>
@@ -526,36 +450,54 @@ const PublishForm = () => {
                 Coloca una fotografía que muestre el mejor ángulo y capte lo
                 mejor del lugar que deseas anunciar en nuestra aplicación
               </Typography>
-              <Box
-                {...getRootProps()}
-                sx={{
-                  bgcolor: "#D9D9D9",
+              {!image ? (
+                <Box
+                  {...getRootProps({ className: 'dropzone' })}
+                  sx={{
+                    bgcolor: "#D9D9D9",
+                    width: "100px",
+                    minWidth: "480px !important",
+                    minHeight: "330px",
+                    borderRadius: "10px",
+                    mt: 1,
+                    display: "flex",
+                    justifyContent: "center",
+                    alignItems: "center",
+                  }}
+                >
+                  <Box component={"input"} {...getInputProps()} />
+                  <Stack sx={{ justifyContent: "center", alignItems: "center" }}>
+                    <Box
+                      component={"img"}
+                      src={addImageIcon}
+                      alt="add image"
+                      sx={{ width: "100px", height: "100px" }}
+                    />
+                    <Typography
+                      sx={{ ...formDescriptionStyle, fontSize: "0.75rem" }}
+                    >
+                      Arrastre o suba aqui la fotografia de su espacio , formatos
+                      permitidos PNG,JPG
+                    </Typography>
+                    {!!errors.image && <Typography sx={{ color: '#d32f2f', fontSize: '0.75rem' }}>{`${errors.image.message}` ?? 'La imagen es obligatoria  '}</Typography>}
+                  </Stack>
+                </Box>
+              ) : (
+                <Box sx={{
                   width: "100px",
                   minWidth: "480px !important",
-                  minHeight: "330px",
+                  maxHeight: "330px",
                   borderRadius: "10px",
                   mt: 1,
-                  display: "flex",
-                  justifyContent: "center",
-                  alignItems: "center",
-                }}
-              >
-                <input {...getInputProps()} />
-                <Stack sx={{ justifyContent: "center", alignItems: "center" }}>
-                  <Box
-                    component={"img"}
-                    src={addImageIcon}
-                    alt="add image"
-                    sx={{ width: "100px", height: "100px" }}
-                  />
-                  <Typography
-                    sx={{ ...formDescriptionStyle, fontSize: "0.75rem" }}
-                  >
-                    Arrastre o suba aqui la fotografia de su espacio , formatos
-                    permitidos PNG,JPG
-                  </Typography>
-                </Stack>
-              </Box>
+                  position: "relative",
+                }}>
+                  <IconButton onClick={clearImage} sx={{backgroundColor: 'rgba(0,0,0, 0.45)', position: 'absolute', top: '5px', right: '5px'}}>
+                    <ClearIcon sx={{color: 'white'}}/>
+                  </IconButton>
+                  <Box component={"img"} src={`${image}`} sx={{ width: "100%", height: "auto", maxHeight: '300px', borderRadius: '10px', objectFit: 'cover', objectPosition: 'center' }}/>
+                </Box>
+              )
+              }
             </Stack>
           </Stack>
         </Box>
@@ -569,6 +511,11 @@ const PublishForm = () => {
             certera posible la localización del lugar que desea publicar
           </Typography>
         </Stack>
+      </Grid>
+      <Grid item xs={12} sx={{ display: 'flex', justifyContent: 'center', my: 2 }}>
+        <PupilinkButton type="submit">
+          Publicar pupilaje
+        </PupilinkButton>
       </Grid>
     </Grid>
   );

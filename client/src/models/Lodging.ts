@@ -1,5 +1,6 @@
 import LodgingStatus from "../enums/LodgingStatus";
 import LodgingType from "../enums/LodgingType";
+import Location from "./Location";
 import LodgingExtras from "./LodgingExtras";
 import Model from "./Model";
 import User from "./User";
