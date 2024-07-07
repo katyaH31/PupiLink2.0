@@ -1,22 +1,34 @@
+import AttachMoneyIcon from "@mui/icons-material/AttachMoney";
+import HomeIcon from "@mui/icons-material/Home";
+import PlaceIcon from "@mui/icons-material/Place";
+import AccessTimeIcon from "@mui/icons-material/AccessTime";
+import LuggageIcon from "@mui/icons-material/Luggage";
+import ExitToAppIcon from "@mui/icons-material/ExitToApp";
 import {
   Box,
   Button,
   Divider,
   Grid,
-  sliderClasses,
+  InputAdornment,
   Stack,
   SxProps,
+  TextField,
   Typography,
 } from "@mui/material";
-import Lodging from "../models/Lodging";
-import LodgingType from "../enums/LodgingType";
-import LodgingStatus from "../enums/LodgingStatus";
 import { useEffect, useState } from "react";
-import LodgingExtraList from "../components/LodgingExtraList";
-import ContractExample from "../assets/ejemplo_contrato.svg";
+import { useNavigate, useParams } from "react-router-dom";
 import ReservationIcon from "../assets/reservation.svg";
+import LodgingExtraList from "../components/LodgingExtraList";
+import LodgingStatus from "../enums/LodgingStatus";
+import LodgingType from "../enums/LodgingType";
+import PupilinkRoutes from "../enums/PupilinkRoutes";
+import Lodging from "../models/Lodging";
+import LodginRequestService from "../services/LodgingRequestService";
 import LodgingService from "../services/LodgingService";
-import { useParams } from "react-router-dom";
+import LodgingUtils from "../utils/LodgingUtils";
+import moment from "moment";
+import "moment/locale/es";
+import { toast } from "react-toastify";
 
 const MOCK: Lodging = {
   id: "1",
@@ -73,18 +85,62 @@ const dividerStyle: SxProps = {
   width: "100%",
 };
 
+moment.locale("es", {
+  months:
+    "Enero_Febrero_Marzo_Abril_Mayo_Junio_Julio_Agosto_Septiembre_Octubre_Noviembre_Diciembre".split(
+      "_"
+    ),
+  monthsShort:
+    "Enero._Feb._Mar_Abr._May_Jun_Jul._Ago_Sept._Oct._Nov._Dec.".split("_"),
+  weekdays: "Domingo_Lunes_Martes_Miercoles_Jueves_Viernes_Sabado".split("_"),
+  weekdaysShort: "Dom._Lun._Mar._Mier._Jue._Vier._Sab.".split("_"),
+  weekdaysMin: "Do_Lu_Ma_Mi_Ju_Vi_Sa".split("_"),
+});
 const LodgingDetails = () => {
-  const { id } = useParams();
-
   const [lodging, setLodging] = useState(MOCK);
+  const [proposedPrice, setProposedPrice] = useState<number | null>(null);
+  const { id } = useParams();
+  const navigate = useNavigate();
+
+  const handleReservation = async () => {
+    if (!proposedPrice) {
+      toast("Por favor, proporcione un precio");
+      return;
+    }
+
+    LodginRequestService.requestLodging({
+      proposedPrice: proposedPrice!,
+      lodging: id!,
+    }).then(() => {
+      toast("Solicitud realizada con exito");
+      navigate(PupilinkRoutes.ROOT);
+    }).catch(() => {
+      toast("No puede solicitar una reserva más de una vez");
+    });
+    
+  };
+
   useEffect(() => {
     if (id) {
       LodgingService.getLodging(id).then((lodging) => setLodging(lodging));
     }
   }, [id]);
+
+  useEffect(() => {
+    setProposedPrice(lodging.price);
+  }, [lodging]);
   return (
     <Grid sx={{ bgcolor: "#F5F5F5" }} container spacing={1}>
-      <Grid item xs={5} sx={{maxHeight: "30rem"}}>
+      <Grid
+        item
+        xs={5}
+        sx={{
+          maxHeight: "40rem",
+          display: "flex",
+          justifyContent: "center",
+          alignItems: "center",
+        }}
+      >
         <Box
           component={"img"}
           alt="lodging image"
@@ -92,14 +148,15 @@ const LodgingDetails = () => {
             width: "95%",
             height: "95%",
             borderRadius: "10px",
-            objectFit: "cover",
+            objectFit: "fill",
             marginInline: "auto",
             mt: "1.25rem",
+            maxHeight: "31rem",
           }}
           src={lodging.image}
         />
       </Grid>
-      <Grid item xs={7} sx={{maxHeight: "30rem"}}>
+      <Grid item xs={7} sx={{ maxHeight: "40rem" }}>
         <Typography
           sx={{
             fontFamily: "Barlow Condensed, Arial",
@@ -115,7 +172,7 @@ const LodgingDetails = () => {
           sx={{
             bgcolor: "#dcdce8",
             borderRadius: "10px",
-            width: "95%",
+            width: "98%",
             p: 2,
             pt: 0,
             minHeight: "26rem",
@@ -132,6 +189,117 @@ const LodgingDetails = () => {
             {lodging.expand?.extras && (
               <LodgingExtraList extras={lodging.expand!.extras!} />
             )}
+          </Stack>
+          <Stack>
+            <Typography sx={titleStyle}>Sobre el arrendamiento</Typography>
+            <Divider sx={dividerStyle} />
+            <Box display={"flex"} sx={{ mt: "5px" }}>
+              <HomeIcon sx={{ color: "#686D76", mr: 1 }} />
+              <Typography sx={descriptionStyle}>
+                {LodgingUtils.getReadableType(lodging.type)}
+              </Typography>
+            </Box>
+            <Box display={"flex"}>
+              <PlaceIcon sx={{ color: "#686D76", mr: 1 }} />
+              <Typography sx={descriptionStyle}>
+                {lodging.expand?.location?.description}
+              </Typography>
+            </Box>
+          </Stack>
+          <Stack>
+            <Typography sx={titleStyle}>Detalles de precio</Typography>
+            <Divider sx={dividerStyle} />
+            <Box
+              display={"flex"}
+              justifyContent={"space-between"}
+              minWidth={"300px"}
+            >
+              <Stack>
+                <Typography sx={{ ...descriptionStyle, fontWeight: "700" }}>
+                  Precio de alquiler
+                </Typography>
+                <Typography sx={descriptionStyle}>Pago por mes</Typography>
+              </Stack>
+              <Box
+                display={"flex"}
+                justifyContent={"space-between"}
+                alignItems={"center"}
+                sx={{ minWidth: "7rem", my: 1 }}
+              >
+                <AttachMoneyIcon
+                  sx={{ color: "#686D76", width: "1.25rem", ml: "0.25rem" }}
+                />
+                <Typography sx={{ ...descriptionStyle, mr: "0.25rem", fontWeight: "700", fontSize: "1.25rem" }}>
+                  {lodging.price}
+                </Typography>
+              </Box>
+            </Box>
+            <Box display={"flex"} justifyContent={"space-between"} my={1}>
+              <Typography sx={{ ...descriptionStyle, fontWeight: "700" }}>
+                Proponé una oferta
+              </Typography>
+              <TextField
+                error={!proposedPrice}
+                helperText={!proposedPrice ? "Debes hacer una oferta" : ""}
+                sx={{
+                  fontFamily: "Barlow Condensed, Arial",
+                  maxWidth: "7rem",
+                  "& *": {
+                    border: "none !important",
+                    borderRadius: "10px",
+                  },
+                  "& .MuiOutlinedInput-root": {
+                    paddingLeft: "0.25rem !important",
+                    border: "none !important",
+                    bgcolor: "#cecee4",
+                  },
+                  "& .MuiOutlinedInput-input": {
+                    fontFamily: "Barlow Condensed, Arial",
+                    textAlign: "right",
+                    color: "#686D76",
+                    fontSize: "1.25rem",
+                    fontWeight: "500",
+                    pr: "0.25rem",
+                    bgcolor: "#cecee4",
+                  },
+                }}
+                inputProps={{
+                  sx: {
+                    fontSize: "0.88rem",
+                    paddingBlock: "0.25rem",
+                    bgcolor: "#dcdce8",
+                  },
+                }}
+                InputProps={{
+                  type: "number",
+                  startAdornment: (
+                    <InputAdornment position="start">
+                      <AttachMoneyIcon
+                        sx={{ height: "1.75rem", width: "auto" }}
+                      />
+                    </InputAdornment>
+                  ),
+                  sx: {
+                    "& input[type=number]::-webkit-inner-spin-button, & input[type=number]::-webkit-outer-spin-button ":
+                      {
+                        WebkitAppearance: "none",
+                        margin: 0,
+                      },
+                  },
+                }}
+                value={proposedPrice}
+                onChange={(e) => {
+                  if (!e.target.value) {
+                    setProposedPrice(null);
+                    return;
+                  }
+
+                  if (!isNaN(Number(e.target.value))) {
+                    setProposedPrice(Number(e.target.value));
+                  }
+                }}
+              />
+            </Box>
           </Stack>
         </Stack>
       </Grid>
@@ -153,14 +321,14 @@ const LodgingDetails = () => {
             sx={{
               bgcolor: "#dcdce8",
               borderRadius: "10px",
-              width: "96.5%",
+              width: "98%",
+              marginInline: "auto",
               height: "auto",
               p: 2,
-              marginLeft: "1%",
             }}
           >
             <Box component={"pre"}>
-              <Typography sx={descriptionStyle}>
+              <Typography sx={{ ...descriptionStyle, ml: "1.5rem" }}>
                 {lodging.coexistenceRules}
               </Typography>
             </Box>
@@ -178,59 +346,137 @@ const LodgingDetails = () => {
             marginLeft: "1%",
           }}
         >
-          Sobre Contrato
+          Reserva
         </Typography>
         <Stack
-          direction={"row"}
           sx={{
-            bgcolor: "#dcdce8",
+            border: "1px solid #865DFF",
             borderRadius: "10px",
-            width: "96.5%",
-            height: "auto",
-            p: 2,
-            marginLeft: "1%",
-            justifyContent: "space-between",
+            marginInline: "auto",
+            width: "98%",
+            padding: 2
           }}
         >
-          <Stack sx={{ width: "45%" }}>
-            <Typography sx={titleStyle}>Mensual</Typography>
-            <Typography sx={descriptionStyle}>
-              Para poder realizar cualquier acción en el lugar, es necesario
-              haber cancelado la cuota mensual correspondiente y acordado
-              previamente una fecha de mudanza. Es importante tener en cuenta
-              que el contrato se renueva de manera mensual y, por lo tanto, se
-              requiere el cumplimiento de estos dos requisitos antes de proceder
-              con cualquier actividad en el lugar. Esto garantiza una gestión
-              adecuada y la transparencia en las relaciones contractuales,
-              asegurando que ambas partes cumplan con sus compromisos acordados.
+          <Typography sx={{ ...titleStyle, fontSize: "1.5rem" }}>
+            Próximos pasos
+          </Typography>
+          <Divider sx={{ border: "1px solid #6B7280", width: "100%", my:2}} />
+          {/* DESPUES DE ENVIAR SOLICITUD */}
+          <Stack
+            direction={"row"}
+            display={"flex"}
+            justifyContent={"space-between"}
+          >
+            <AccessTimeIcon
+              sx={{
+                color: "#865DFF",
+                width: "4rem",
+                height: "4rem",
+                ml: "2.5rem",
+              }}
+            />
+            <Stack width={"20%"}>
+              <Typography
+                sx={{
+                  ...descriptionStyle,
+                  fontWeight: "600",
+                  color: "#865DFF",
+                  fontSize: "1.5rem",
+                  ml: "10px",
+                }}
+              >
+                1. Después de enviar la solicitud
+              </Typography>
+              <Typography sx={{ ...descriptionStyle, fontSize: "1.25rem", ml: "10px" }}>
+                ¿Qué pasa despues?
+              </Typography>
+            </Stack>
+            <Typography
+              sx={{ ...descriptionStyle, fontSize: "1.25rem", maxWidth: "60%" }}
+            >
+              Se habilitara un chat con el propietario para que puedan llegar a
+              un acuerdo. El arrendador respondera en un lapso de 72 horas. Una
+              vez aceptada la solicitud, puedes empezar a habitar el lugar.
             </Typography>
           </Stack>
-          <Stack sx={{ width: "40%" }}>
-            <Typography sx={titleStyle}>Ejemplos</Typography>
-            <Box display={"flex"} flexWrap={"wrap"}>
-              <Box>
-                <Typography sx={descriptionStyle}>
-                  Si la mudanza acordada es el día 20
-                </Typography>
-                <Typography sx={descriptionStyle}>
-                  El contrato inicia ese mismo día
-                </Typography>
-              </Box>
-              <Box sx={{ ml: "2rem" }}>
-                <Typography sx={descriptionStyle}>
-                  Si la mudanza acordada es el día 15
-                </Typography>
-                <Typography sx={descriptionStyle}>
-                  El contrato finaliza el día 15 del siguiente mes
-                </Typography>
-              </Box>
-            </Box>
-            <Box
-              component={"img"}
-              alt="contract example"
-              src={ContractExample}
-              sx={{ width: "90%", height: "auto", mt: 1 }}
+          <Divider sx={{ border: "1px solid #6B7280", width: "100%", my:2}} />
+          {/* AL MUDARTE */}
+          <Stack
+            direction={"row"}
+            display={"flex"}
+            justifyContent={"space-between"}
+          >
+            <LuggageIcon
+              sx={{
+                color: "#865DFF",
+                width: "4rem",
+                height: "4rem",
+                ml: "2.5rem",
+              }}
             />
+            <Stack width={"20%"}>
+              <Typography
+                sx={{
+                  ...descriptionStyle,
+                  fontWeight: "600",
+                  color: "#865DFF",
+                  fontSize: "1.5rem",
+                  ml: "10px",
+                }}
+              >
+                2. Al mudarte
+              </Typography>
+              <Typography sx={{ ...descriptionStyle, fontSize: "1.25rem", ml: "10px"}}>
+                {moment(lodging.available).format("Do MMM YY")}
+              </Typography>
+            </Stack>
+            <Typography
+              sx={{ ...descriptionStyle, fontSize: "1.25rem", maxWidth: "60%" }}
+            >
+              Tendras 24 horas habiles para reportar cualquier problema con el
+              lugar. Te recomendamos tomar fotografías del lugar para evitar
+              malentendidos y verificar que la propiedad cuente con los
+              servicios acordados.
+            </Typography>
+          </Stack>
+          <Divider sx={{ border: "1px solid #6B7280", width: "100%", my:2}} />
+          {/* AL TERMINAR TU ESTANCIA */}
+          <Stack
+            direction={"row"}
+            display={"flex"}
+            justifyContent={"space-between"}
+          >
+            <ExitToAppIcon
+              sx={{
+                color: "#865DFF",
+                width: "4rem",
+                height: "4rem",
+                ml: "2.5rem",
+              }}
+            />
+            <Stack width={"20%"}>
+              <Typography
+                sx={{
+                  ...descriptionStyle,
+                  fontWeight: "600",
+                  color: "#865DFF",
+                  fontSize: "1.5rem",
+                  ml: "10px",
+                }}
+              >
+                3. Al terminar tu estancia
+              </Typography>
+              <Typography sx={{ ...descriptionStyle, fontSize: "1.25rem", ml: "10px"}}>
+                {moment(lodging.available).add(1, "month").format("Do MMM YY")}
+              </Typography>
+            </Stack>
+            <Typography
+              sx={{ ...descriptionStyle, fontSize: "1.25rem", maxWidth: "60%" }}
+            >
+              Manten el lugar en perfectas condiciones y respeto el tiempo de
+              estancia acordado, para evitar incumplir los términos establecidos
+              en la plataforma.
+            </Typography>
           </Stack>
         </Stack>
       </Grid>
@@ -253,7 +499,7 @@ const LodgingDetails = () => {
               sx={{ width: "1.5rem", height: "auto" }}
             />
           }
-          type="submit"
+          onClick={handleReservation}
         >
           Solicitar Reserva
         </Button>
