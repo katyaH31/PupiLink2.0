@@ -4,6 +4,8 @@ import AlternateEmailIcon from '@mui/icons-material/AlternateEmail';
 import KeyIcon from '@mui/icons-material/Key';
 import { Link } from "react-router-dom";
 import pb from "../server/Connection.ts";  
+import { toast, ToastContainer, ToastOptions } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 const Register: React.FC = () => {
     const [selectedRole, setSelectedRole] = useState<'Inquilino' | 'Propietario'>('Inquilino');
@@ -12,10 +14,24 @@ const Register: React.FC = () => {
     const [passwordConfirm, setPasswordConfirm] = useState('');
     const [name, setName] = useState('');
 
+    const toastOptions: ToastOptions = {
+        position: "top-right",
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+    };
+
     const handleRegister = async (e: React.FormEvent) => {
         e.preventDefault();
         if (password !== passwordConfirm) {
-            alert('Las contraseñas no coinciden');
+            toast.error('Las contraseñas no coinciden', {
+                ...toastOptions,
+                style: { backgroundColor: 'red', color: 'white' },
+                progressStyle: { backgroundColor: 'white' }
+            });
             return;
         }
 
@@ -27,16 +43,25 @@ const Register: React.FC = () => {
                 name,
                 role: selectedRole
             });
-            alert('Usuario registrado con éxito');
+            toast.success('Usuario registrado con éxito', {
+                ...toastOptions,
+                style: { backgroundColor: 'white', color: 'green' },
+                progressStyle: { backgroundColor: 'green' }
+            });
         } catch (error) {
-            alert('Error al registrar usuario');
+            toast.error('Error al registrar usuario', {
+                ...toastOptions,
+                style: { backgroundColor: 'white', color: 'red' },
+                progressStyle: { backgroundColor: 'red' }
+            });
             console.error(error);
         }
     };
 
     return (
-        <div className="min-h-screen flex items-center justify-center bg-gray-100 font-barlow">
+        <div className="min-h-screen flex items-center justify-center bg-white font-barlow">
             <div className="bg-white p-6 rounded-lg shadow-lg max-w-sm w-full">
+                <ToastContainer />
                 <div className="flex flex-col items-center mb-4">
                     <div className="flex justify-center mb-4">
                         <span className="text-gray-500 text-lg font-medium">Registrarse</span>
@@ -131,6 +156,7 @@ const Register: React.FC = () => {
 };
 
 export default Register;
+
 
 
 
