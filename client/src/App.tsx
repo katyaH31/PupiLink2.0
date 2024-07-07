@@ -10,6 +10,7 @@ import ForgotPassword from "./pages/ForgotPassword";
 import PublishForm from "./pages/PublishForm";
 import { LocalizationProvider } from "@mui/x-date-pickers";
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs'
+import LodgingMap from "./pages/LodgingMap";
 
 function App() {
   const router = createBrowserRouter([
@@ -33,7 +34,11 @@ function App() {
     {
       path: PupilinkRoutes.PUBLISH_FORM,
       element: <PublishForm/>,
-    }
+    },
+    {
+      path: PupilinkRoutes.LODGING_MAP,
+      element: <LodgingMap />,
+    },
   ]);
 
   return (
