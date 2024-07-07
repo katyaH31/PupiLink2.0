@@ -106,11 +106,11 @@ const Filter_bar: React.FC<FilterProps> = ({ onFilterChange }) => {
             onChange={(e) => setType(e.target.value)}
             startAdornment={<HomeIcon sx={{ mr: 1, color: '#686D76' }} />}
           >
-            <MenuItem value="APARTMENT">APARTMENT</MenuItem>
-            <MenuItem value="STUDIO">STUDIO</MenuItem>
-            <MenuItem value="HOUSE">HOUSE</MenuItem>
-            <MenuItem value="ROOM">ROOM</MenuItem>
-            <MenuItem value="STUDENT_RESIDENCE">STUDENT_RESIDENCE</MenuItem>
+            <MenuItem value="APARTMENT">Apartamento</MenuItem>
+            <MenuItem value="STUDIO">Estudio</MenuItem>
+            <MenuItem value="HOUSE">Casa</MenuItem>
+            <MenuItem value="ROOM">Habitación</MenuItem>
+            <MenuItem value="STUDENT_RESIDENCE">Residencia estudiantil</MenuItem>
           </Select>
         </FormControl>
       </Box>

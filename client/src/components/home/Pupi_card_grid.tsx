@@ -81,7 +81,7 @@ export default function Pupi_card_grid({ filters }: Pupi_card_gridProps) {
     if (filters.maxPrice !== null && lodging.price > filters.maxPrice) {
       return false;
     }
-    if (filters.type && lodging.type !== filters.type) {
+    if (filters.type && lodging.type != filters.type) {
       return false;
     }
     return true;
