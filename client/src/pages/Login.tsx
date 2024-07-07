@@ -4,21 +4,44 @@ import { Link, useNavigate } from 'react-router-dom';
 import AlternateEmailIcon from '@mui/icons-material/AlternateEmail';
 import KeyIcon from '@mui/icons-material/Key';
 import pb from '../server/Connection.ts';
+import { toast, ToastContainer, ToastOptions } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 const Login: React.FC = () => {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const navigate = useNavigate();
 
+    const toastOptions: ToastOptions = {
+        position: "top-right",
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+    };
+
     const handleLogin = async (e: React.FormEvent) => {
         e.preventDefault();
         try {
             const authData = await pb.collection('users').authWithPassword(email, password);
-            alert('Inicio de sesión exitoso');
+            toast.success('Inicio de sesión exitoso', {
+                ...toastOptions,
+                style: { backgroundColor: 'white', color: 'green' },
+                progressStyle: { backgroundColor: 'green' }
+            });
             console.log(authData);
-            navigate('/'); // Redirigir a la página principal u otra página después del inicio de sesión
+            // Retraso de 2 segundos antes de redirigir
+            setTimeout(() => {
+                navigate('/');
+            }, 2000);
         } catch (error) {
-            alert('Error al iniciar sesión');
+            toast.error('Error al iniciar sesión', {
+                ...toastOptions,
+                style: { backgroundColor: 'white', color: 'red' },
+                progressStyle: { backgroundColor: 'red' }
+            });
             console.error(error);
         }
     };
@@ -26,13 +49,13 @@ const Login: React.FC = () => {
     return (
         <div className="min-h-screen flex items-center justify-center bg-gray-100 font-barlow">
             <div className="bg-white p-6 rounded-lg shadow-lg max-w-sm w-full">
+                <ToastContainer />
                 <div className="flex justify-center mb-4">
                     <img src={logo} alt="Logo" className="h-32" />
                 </div>
                 <h2 className="text-xl font-regular text-center text-gray-500 mb-6">
                     Inicia sesión y empieza tu nueva experiencia
                 </h2>
-
                 <form onSubmit={handleLogin}>
                     <div className="mb-4 relative">
                         <label htmlFor="email" className="block text-gray-700 sr-only">Dirección de correo electrónico</label>
@@ -62,7 +85,6 @@ const Login: React.FC = () => {
                             <KeyIcon className="text-gray-400" />
                         </div>
                     </div>
-                    
                     <button type="submit" className="w-full py-2 text-white text-xl font-bold bg-custom-purple rounded-full shadow-lg hover:bg-purple-700">
                         Iniciar sesión
                     </button>
@@ -78,3 +100,6 @@ const Login: React.FC = () => {
 };
 
 export default Login;
+
+
+
