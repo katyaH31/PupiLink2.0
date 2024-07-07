@@ -69,7 +69,7 @@ const extraChildBoxStyle: SxProps = {
   padding: "0.25rem 0.5rem",
   bgcolor: "#ffffff",
   minWidth: "15vw",
-  maxWidth: '200px',
+  maxWidth: "200px",
   mr: 5,
 };
 
@@ -424,7 +424,9 @@ const PublishForm = () => {
             <Stack>
               {/* Numeric extras: */}
               <Stack>
-                <Typography sx={formTitleStyle}>Velocidad de internet</Typography>
+                <Typography sx={formTitleStyle}>
+                  Velocidad de internet
+                </Typography>
                 <Box sx={{ display: "flex", alignItems: "center" }}>
                   <TextField
                     size="small"
@@ -456,7 +458,9 @@ const PublishForm = () => {
                 </Box>
               </Stack>
               <Stack>
-                <Typography sx={formTitleStyle}>Cantidad de habitaciones</Typography>
+                <Typography sx={formTitleStyle}>
+                  Cantidad de habitaciones
+                </Typography>
                 <Box sx={{ display: "flex", alignItems: "center" }}>
                   <TextField
                     size="small"
@@ -512,7 +516,12 @@ const PublishForm = () => {
                           }}
                           position="start"
                         >
-                          <Box component={"img"} src={ToiletIcon} alt="Toilet icon" sx={{width: "18px", height: "18px"}}/>
+                          <Box
+                            component={"img"}
+                            src={ToiletIcon}
+                            alt="Toilet icon"
+                            sx={{ width: "18px", height: "18px" }}
+                          />
                         </InputAdornment>
                       ),
                     }}
