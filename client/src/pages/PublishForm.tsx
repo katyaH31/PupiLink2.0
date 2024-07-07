@@ -135,7 +135,7 @@ const lodgingTypeRadioOptions: RadioGroupType<LodgingType>[] = [
 const PublishForm = () => {
   const [coordinates, setCoordinates] = useState(null);
   const [image, setImage] = useState<string | null>(null);
-  const { handleSubmit, control, setValue, formState: { errors}} = useForm<PublishLodgingRequest>({ resolver: zodResolver(PublishLodgingSchema) });
+  const { handleSubmit, control, setValue, formState:  { errors }} = useForm<PublishLodgingRequest>({ resolver: zodResolver(PublishLodgingSchema)});
   const navigate = useNavigate();
   const markerRef = useRef(null);
 
@@ -155,7 +155,7 @@ const PublishForm = () => {
   }
 
   const ClickHandler = ({ setCoordinates }) => {
-    useMapEvent('click', (event) => {
+    useMapEvent("click", (event) => {
       const { lat, lng } = event.latlng;
       setCoordinates({ lat: lat.toString(), lng: lng.toString() });
     });
@@ -168,33 +168,40 @@ const PublishForm = () => {
     }
   }, [coordinates]);
 
-
-
   const onSubmit = async (data: PublishLodgingRequest) => {
-    try{
-      data.latitude = coordinates.lat;
-      data.longitude = coordinates.lng;
-      toast.success('Alojamiento publicado con exito', {
-        ...toastOptions,
-        style: { backgroundColor: 'white', color: 'green' },
-        progressStyle: { backgroundColor: 'green' }
-    });
+    try {
+      data.latitude = coordinates?.lat ? coordinates.lat : "0";
+      data.longitude = coordinates?.lng ? coordinates.lng : "0";
 
       const response = await LodgingService.createLodging(data);
 
+      toast.success("Alojamiento publicado con exito", {
+        ...toastOptions,
+        style: { backgroundColor: "white", color: "green" },
+        progressStyle: { backgroundColor: "green" },
+      });
       setTimeout(() => {
         navigate(PupilinkRoutes.ROOT);
-    }, 1000);
-
-    }catch (error) {
-      toast.error('Error al registrar alojamiento', {
-          ...toastOptions,
-          style: { backgroundColor: 'white', color: 'red' },
-          progressStyle: { backgroundColor: 'red' }
+      }, 1000);
+    } catch (error) {
+      toast.error("Error al registrar alojamiento", {
+        ...toastOptions,
+        style: { backgroundColor: "white", color: "red" },
+        progressStyle: { backgroundColor: "red" },
       });
       console.error(error);
-  }
+    }
   };
+
+  useEffect(() => {
+    if (Object.keys(errors).length > 0) {
+      toast.error("Por favor revisa que todos los campos esten llenos", {
+        ...toastOptions,
+        style: { backgroundColor: "white", color: "red" },
+        progressStyle: { backgroundColor: "red" },
+      });
+    }
+  }, [errors]);
 
   const onDrop = useCallback((acceptedFiles: File[]) => {
     const file = acceptedFiles[0];
