@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import ChatWindow from '../components/ChatWindow';
 import Pupi_card_grid from '../components/Pupi_card_grid';
 import Filter_bar from '../components/Filter_bar';
+import NavbarUser from '../components/NavbarUser';
 import { Box, Typography } from "@mui/material";
 
 interface Filters {
@@ -25,6 +26,7 @@ const Home: React.FC = () => {
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-gray-100 relative">
+      <NavbarUser/>
       <div className="text-center">
         <Box sx={{ marginBottom: 4 }}>
           <Typography sx={{ fontSize: "30px", fontFamily: "Barlow Condensed" }}>
