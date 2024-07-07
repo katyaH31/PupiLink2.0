@@ -1,17 +1,16 @@
-import React, { useState } from 'react';
+import AttachMoneyIcon from "@mui/icons-material/AttachMoney";
+import HomeIcon from "@mui/icons-material/Home";
+import ScreenSearchDesktopIcon from "@mui/icons-material/ScreenSearchDesktop";
 import {
   Box,
   Button,
-  Select,
-  MenuItem,
-  TextField,
-  InputLabel,
   FormControl,
-} from '@mui/material';
-import ScreenSearchDesktopIcon from '@mui/icons-material/ScreenSearchDesktop';
-import LocationCityIcon from '@mui/icons-material/LocationCity';
-import AttachMoneyIcon from '@mui/icons-material/AttachMoney';
-import HomeIcon from '@mui/icons-material/Home';
+  InputLabel,
+  MenuItem,
+  Select,
+  TextField,
+} from "@mui/material";
+import React, { useState } from "react";
 
 interface FilterProps {
   onFilterChange: (filters: {
@@ -23,10 +22,10 @@ interface FilterProps {
 }
 
 const Filter_bar: React.FC<FilterProps> = ({ onFilterChange }) => {
-  const [city, setCity] = useState<string>('');
+  const [city, setCity] = useState<string>("");
   const [minPrice, setMinPrice] = useState<number | null>(null);
   const [maxPrice, setMaxPrice] = useState<number | null>(null);
-  const [type, setType] = useState<string>('');
+  const [type, setType] = useState<string>("");
 
   const handleFilterChange = (e: React.FormEvent) => {
     e.preventDefault();
@@ -42,61 +41,55 @@ const Filter_bar: React.FC<FilterProps> = ({ onFilterChange }) => {
     <Box
       component="form"
       sx={{
-        display: 'flex',
-        flexDirection: 'column',
-        margin: '2rem',
+        display: "flex",
+        flexDirection: "column",
+        margin: "2rem",
         gap: 2,
-        alignItems: 'center',
+        alignItems: "center",
       }}
       onSubmit={handleFilterChange}
     >
       <Box
         sx={{
-          display: 'flex',
-          flexDirection: 'row',
+          display: "flex",
+          flexDirection: "row",
           gap: 2,
-          alignItems: 'center',
+          alignItems: "center",
         }}
       >
-        <FormControl sx={{ minWidth: 120 }}>
-          <InputLabel
-            id="city-select-label"
-            sx={{ fontFamily: 'Barlow Condensed', fontSize: '20px' }}
-          >
-            Ciudad
-          </InputLabel>
-          <Select
-            labelId="city-select-label"
-            id="city-select"
-            label="Ciudad"
-            value={city}
-            onChange={(e) => setCity(e.target.value)}
-            startAdornment={<LocationCityIcon sx={{ mr: 1, color: '#686D76' }} />}
-          >
-            <MenuItem value="La Libertad">La Libertad</MenuItem>
-          </Select>
+        <FormControl sx={{ minWidth: 300 }}>
+          <TextField
+            label="Precio Mínimo"
+            type="number"
+            InputProps={{
+              inputProps: { min: 0 },
+              startAdornment: (
+                <AttachMoneyIcon sx={{ mr: 1, color: "#686D76" }} />
+              ),
+            }}
+            value={minPrice !== null ? minPrice : ""}
+            onChange={(e) =>
+              setMinPrice(e.target.value ? parseInt(e.target.value) : null)
+            }
+          />
         </FormControl>
-        <TextField
-          label="Precio Mínimo"
-          type="number"
-          InputProps={{
-            inputProps: { min: 0 },
-            startAdornment: <AttachMoneyIcon sx={{ mr: 1, color: '#686D76' }} />,
-          }}
-          value={minPrice !== null ? minPrice : ''}
-          onChange={(e) => setMinPrice(e.target.value ? parseInt(e.target.value) : null)}
-        />
-        <TextField
-          label="Precio Máximo"
-          type="number"
-          InputProps={{
-            inputProps: { min: 0 },
-            startAdornment: <AttachMoneyIcon sx={{ mr: 1, color: '#686D76' }} />,
-          }}
-          value={maxPrice !== null ? maxPrice : ''}
-          onChange={(e) => setMaxPrice(e.target.value ? parseInt(e.target.value) : null)}
-        />
-        <FormControl sx={{ minWidth: 120 }}>
+        <FormControl sx={{ minWidth: 300 }}>
+          <TextField
+            label="Precio Máximo"
+            type="number"
+            InputProps={{
+              inputProps: { min: 0 },
+              startAdornment: (
+                <AttachMoneyIcon sx={{ mr: 1, color: "#686D76" }} />
+              ),
+            }}
+            value={maxPrice !== null ? maxPrice : ""}
+            onChange={(e) =>
+              setMaxPrice(e.target.value ? parseInt(e.target.value) : null)
+            }
+          />
+        </FormControl>
+        <FormControl sx={{ minWidth: 300 }}>
           <InputLabel id="type-select-label">Tipo de lugar</InputLabel>
           <Select
             labelId="type-select-label"
@@ -104,24 +97,29 @@ const Filter_bar: React.FC<FilterProps> = ({ onFilterChange }) => {
             label="Tipo de lugar"
             value={type}
             onChange={(e) => setType(e.target.value)}
-            startAdornment={<HomeIcon sx={{ mr: 1, color: '#686D76' }} />}
+            startAdornment={<HomeIcon sx={{ mr: 1, color: "#686D76" }} />}
           >
+            <MenuItem value="">
+              Todos
+            </MenuItem>
             <MenuItem value="APARTMENT">Apartamento</MenuItem>
             <MenuItem value="STUDIO">Estudio</MenuItem>
             <MenuItem value="HOUSE">Casa</MenuItem>
             <MenuItem value="ROOM">Habitación</MenuItem>
-            <MenuItem value="STUDENT_RESIDENCE">Residencia estudiantil</MenuItem>
+            <MenuItem value="STUDENT_RESIDENCE">
+              Residencia estudiantil
+            </MenuItem>
           </Select>
         </FormControl>
       </Box>
       <Button
         variant="contained"
         sx={{
-          background: '#865DFF',
-          borderRadius: '5rem',
-          width: '20rem',
-          fontSize: '20px',
-          '&:hover': { bgcolor: '#571FFF' },
+          background: "#865DFF",
+          borderRadius: "5rem",
+          width: "20rem",
+          fontSize: "20px",
+          "&:hover": { bgcolor: "#571FFF" },
         }}
         startIcon={<ScreenSearchDesktopIcon />}
         type="submit"
@@ -133,4 +131,3 @@ const Filter_bar: React.FC<FilterProps> = ({ onFilterChange }) => {
 };
 
 export default Filter_bar;
-

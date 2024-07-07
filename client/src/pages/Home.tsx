@@ -28,7 +28,7 @@ const Home: React.FC = () => {
       <div className="text-center">
         <Box sx={{ marginBottom: 4 }}>
           <Typography sx={{ fontSize: "30px", fontFamily: "Barlow Condensed" }}>
-            ¿Buscas pupilaje? <span style={{ color: "#724DFF", fontWeight: "bold" }}>cuenta con nosotros</span>
+            ¿Buscas pupilaje? <span style={{ color: "#724DFF", fontWeight: "bold" }}>¡cuenta con nosotros!</span>
           </Typography>
         </Box>
         <Filter_bar onFilterChange={handleFilterChange} />
