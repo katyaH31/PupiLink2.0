@@ -160,7 +160,7 @@ const PublishForm = () => {
   });
   return (
     //Grid father:
-    <Grid component={"form"} onSubmit={handleSubmit(onSubmit)} sx={{ bgcolor: "#F5F5F5" }} container spacing={1}>
+    <Grid component={"form"} onSubmit={handleSubmit(onSubmit)} sx={{ bgcolor: "#F5F5F5", width:"98%", marginInline: "auto", my: 2}} container spacing={1}>
       {/*Grid child 1:*/}
       <Grid item xs={6}>
         <Stack>
@@ -188,7 +188,7 @@ const PublishForm = () => {
             Agrega una descripción conciza del espacio que estas dando en
             alquiler
           </Typography>
-          <TextInput name="description" control={control} />
+          <TextInput name="description" control={control} multiline />
         </Stack>
         <Stack>
           <Typography sx={formTitleStyle}>Tipo</Typography>
