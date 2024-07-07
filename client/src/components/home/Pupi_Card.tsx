@@ -1,11 +1,13 @@
+import AttachMoneyIcon from "@mui/icons-material/AttachMoney";
+import HomeIcon from "@mui/icons-material/Home";
+import LocationOnIcon from "@mui/icons-material/LocationOn";
+import { Box, CardActionArea, Tooltip } from "@mui/material";
 import Card from "@mui/material/Card";
 import CardContent from "@mui/material/CardContent";
 import CardMedia from "@mui/material/CardMedia";
 import Typography from "@mui/material/Typography";
-import LocationOnIcon from "@mui/icons-material/LocationOn";
-import HomeIcon from "@mui/icons-material/Home";
-import AttachMoneyIcon from "@mui/icons-material/AttachMoney";
-import { Box, CardActionArea } from "@mui/material";
+import { useNavigate } from "react-router-dom";
+import PupilinkRoutes from "../../enums/PupilinkRoutes";
 import pb from "../../server/Connection";
 
 interface Lodging {
@@ -38,60 +40,82 @@ interface Pupi_CardsProps {
 }
 
 export default function Pupi_Card({ lodging, location }: Pupi_CardsProps) {
+  const navigate = useNavigate();
+
   // Construye la URL completa de la imagen usando pb.files.getUrl
   const imageUrl = pb.files.getUrl(lodging, lodging.image);
 
   return (
-    <Card sx={{ maxWidth: 310 }}>
+    <Card
+      sx={{ maxWidth: 310 }}
+      onClick={() =>
+        navigate(PupilinkRoutes.LODGING_DETAILS.replace(":id", lodging.id))
+      }
+    >
       <CardActionArea>
-        <Box sx={{ height: 200, overflow: 'hidden' }}>
+        <Box sx={{ height: 200, overflow: "hidden" }}>
           <CardMedia
             component="img"
-            sx={{ height: '100%', width: '100%', objectFit: 'cover' }}
+            sx={{ height: "100%", width: "100%", objectFit: "cover" }}
             image={imageUrl}
             alt="image"
           />
         </Box>
         <CardContent>
-          <Box sx={{ display: "flex", alignItems: "center", marginBottom: 1 }}>
-            <HomeIcon sx={{ fontSize: "20px", marginRight: "0.5rem" }} />
-            <Typography
-              sx={{
-                fontSize: "18px",
-                fontFamily: "Barlow Condensed",
-                fontWeight: "bold",
-                textAlign: "left",
-                color: "#686D76"
-              }}
-            >
-              {lodging.title}
-            </Typography>
-          </Box>
-
-          <Box sx={{ display: "flex", alignItems: "center", marginBottom: 1 }}>
-            <LocationOnIcon sx={{ fontSize: "20px", marginRight: "0.5rem" }} />
-            <Typography
-              sx={{
-                fontSize: "18px",
-                fontFamily: "Barlow Condensed",
-                fontWeight: "bold",
-                textAlign: "left",
-                color: "#686D76"
-              }}
-            >
-              {location?.name || 'Ubicación desconocida'}
-            </Typography>
+          <Box sx={{ display: "flex", alignItems: "center" }}>
+            <HomeIcon sx={{ fontSize: "20px" }} />
+            <Tooltip title={lodging.title}>
+              <Typography
+                sx={{
+                  fontSize: "18px",
+                  fontFamily: "Barlow Condensed",
+                  fontWeight: "bold",
+                  textAlign: "left",
+                  marginInlineStart: "0.5rem",
+                  color: "#686D76",
+                  overflow: "hidden",
+                  textOverflow: "ellipsis",
+                  whiteSpace: "nowrap",
+                  maxWidth: "90%",
+                }}
+              >
+                {lodging.title}
+              </Typography>
+            </Tooltip>
           </Box>
 
           <Box sx={{ display: "flex", alignItems: "center" }}>
-            <AttachMoneyIcon sx={{ fontSize: "20px", marginRight: "0.5rem" }} />
+            <LocationOnIcon sx={{ fontSize: "20px" }} />
+            <Tooltip title={location?.name || "Ubicación desconocida"}>
+              <Typography
+                sx={{
+                  fontSize: "18px",
+                  fontFamily: "Barlow Condensed",
+                  fontWeight: "bold",
+                  textAlign: "left",
+                  marginInlineStart: "0.5rem",
+                  color: "#686D76",
+                  overflow: "hidden",
+                  textOverflow: "ellipsis",
+                  whiteSpace: "nowrap",
+                  maxWidth: "90%",
+                }}
+              >
+                {location?.name || "Ubicación desconocida"}
+              </Typography>
+            </Tooltip>
+          </Box>
+
+          <Box sx={{ display: "flex", alignItems: "center" }}>
+            <AttachMoneyIcon sx={{ fontSize: "25px" }} />
             <Typography
               sx={{
                 fontSize: "20px",
                 fontFamily: "Barlow Condensed",
                 fontWeight: "bold",
                 textAlign: "left",
-                color: "#686D76"
+                marginInlineStart: "0.5rem",
+                color: "#686D76",
               }}
             >
               {lodging.price}

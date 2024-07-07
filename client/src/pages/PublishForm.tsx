@@ -81,7 +81,7 @@ const extraChildBoxStyle: SxProps = {
   padding: "0.25rem 0.5rem",
   bgcolor: "#ffffff",
   minWidth: "15vw",
-  maxWidth: '200px',
+  maxWidth: "200px",
   mr: 5,
 };
 

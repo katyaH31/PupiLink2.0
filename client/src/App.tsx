@@ -7,9 +7,12 @@ import NotFound from "./pages/NotFound";
 import Register from "./pages/Register";
 import Login from "./pages/Login";
 import ForgotPassword from "./pages/ForgotPassword";
+import LodgingDetails from "./pages/LodgingDetails";
 import PublishForm from "./pages/PublishForm";
 import { LocalizationProvider } from "@mui/x-date-pickers";
-import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs'
+import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
+import { ToastContainer} from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 import LodgingMap from "./pages/LodgingMap";
 
 function App() {
@@ -31,6 +34,11 @@ function App() {
       path: PupilinkRoutes.FORGOT_PASSWORD,
       element: <ForgotPassword />,
     },
+    { path: PupilinkRoutes.PUBLISH_FORM, element: <PublishForm /> },
+    {
+      path: PupilinkRoutes.LODGING_DETAILS,
+      element: <LodgingDetails />,
+    },
     {
       path: PupilinkRoutes.PUBLISH_FORM,
       element: <PublishForm/>,
@@ -44,10 +52,11 @@ function App() {
   return (
     <ThemeProvider theme={DefaultTheme}>
       <LocalizationProvider dateAdapter={AdapterDayjs}>
-      <CssBaseline />
-      <RouterProvider router={router} />
+        <CssBaseline /> 
+        <ToastContainer/>
+        <RouterProvider router={router} />
       </LocalizationProvider>
-    </ThemeProvider>   
+    </ThemeProvider>
   );
 }
 
