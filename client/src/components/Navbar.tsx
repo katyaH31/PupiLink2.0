@@ -86,6 +86,9 @@ const Navbar: React.FC = () => {
                   textOverflow: "ellipsis",
                   whiteSpace: "nowrap",
                   maxWidth: "90%",
+                  '@media (max-width: 600px)': {
+                    display: 'none',
+                  },
                 }}>Hola, {user.name}</Typography>
 
             <button onClick={toggleMenu} className="text-gray-600">

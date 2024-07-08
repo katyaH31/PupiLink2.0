@@ -16,6 +16,7 @@ import "react-toastify/dist/ReactToastify.css";
 import MyRequests from "./pages/MyRequests";
 import MyAds from "./pages/MyAds";
 
+
 function App() {
   const router = createBrowserRouter([
     {
@@ -43,10 +44,6 @@ function App() {
     {
       path: PupilinkRoutes.PUBLISH_FORM,
       element: <PublishForm/>,
-    },
-    {
-      path: PupilinkRoutes.LODGING_MAP,
-      element: <LodgingMap />,
     },
     {
       path: PupilinkRoutes.MY_REQUESTS, // Añade esta línea
