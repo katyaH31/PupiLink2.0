@@ -135,7 +135,6 @@ const LodgingDetails = () => {
 
   return (
     <>
-      <NavbarUser />
       <Grid container spacing={2} sx={{ bgcolor: "#F5F5F5", pt: { xs: 8, md: 10 } }}>
         <Grid
           item
