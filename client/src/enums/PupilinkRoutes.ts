@@ -5,7 +5,8 @@ enum PupilinkRoutes {
   PUBLISH_FORM = "/publish",
   FORGOT_PASSWORD = "/forgot-password",
   LODGING_DETAILS = "/details/:id",
-  LODGING_MAP = "/lodging_map"
+  LODGING_MAP = "/lodging_map",
+  MY_REQUESTS = "/myrequests"
 }
 
 export default PupilinkRoutes;

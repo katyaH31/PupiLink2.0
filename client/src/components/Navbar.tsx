@@ -61,7 +61,7 @@ const Navbar: React.FC = () => {
             </button>
             {menuOpen && (
               <div ref={menuRef} className="absolute right-0 mt-2 w-48 bg-white rounded-md shadow-lg z-20" style={{ top: '2.5rem' }}>
-                <Link to="/tus-solicitudes" className="font-barlowc text-xl block px-4 py-2 text-gray-800 hover:bg-gray-200">Tus solicitudes</Link>
+                <Link to="/myrequests" className="font-barlowc text-xl block px-4 py-2 text-gray-800 hover:bg-gray-200">Tus solicitudes</Link>
                 <Link to="/tus-anuncios" className="font-barlowc text-xl block px-4 py-2 text-gray-800 hover:bg-gray-200">Tus anuncios</Link>
                 <button onClick={handleLogout} className="font-barlowc text-xl w-full text-left block px-4 py-2 text-gray-800 hover:bg-gray-200">Cerrar sesión</button>
               </div>
