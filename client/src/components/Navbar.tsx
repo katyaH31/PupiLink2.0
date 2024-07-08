@@ -55,7 +55,10 @@ const Navbar: React.FC = () => {
   return (
     <nav className="bg-white opacity-2 p-1 flex justify-between items-center fixed top-0 left-0 w-full z-30">
       <div className="flex items-center">
-        <img src={logo} alt="Logo" className="h-12"  /> 
+      <Link to="/">
+  <img src={logo} alt="Logo" className="h-12" />
+</Link>
+
         <Button
                 onClick={handlePushishForm}
                 sx={{
