@@ -4,13 +4,12 @@ import { useNavigate } from "react-router-dom";
 import PupilinkRoutes from "../enums/PupilinkRoutes";
 
 const NotFound = () => {
-
   const navigate = useNavigate();
 
   const goHome = () => {
     navigate(PupilinkRoutes.ROOT);
-  }
-  
+  };
+
   return (
     <Box
       sx={{
@@ -21,6 +20,8 @@ const NotFound = () => {
         justifyContent: "center",
         alignItems: "center",
         flexDirection: "column",
+        textAlign: "center",
+        p: 2,
       }}
     >
       <Box
@@ -31,22 +32,52 @@ const NotFound = () => {
         }}
       >
         <Typography
-          sx={{ fontSize: "7rem", fontWeight: "bold", color: "#865DFF" }}
+          sx={{
+            fontSize: { xs: "4rem", sm: "5rem", md: "7rem" },
+            fontWeight: "bold",
+            color: "#865DFF",
+          }}
         >
           4
         </Typography>
-        <PlaceIcon sx={{ width: "7rem", height: "7rem", color: "black" }} />
+        <PlaceIcon
+          sx={{
+            width: { xs: "4rem", sm: "5rem", md: "7rem" },
+            height: { xs: "4rem", sm: "5rem", md: "7rem" },
+            color: "black",
+          }}
+        />
         <Typography
-          sx={{ fontSize: "7rem", fontWeight: "bold", color: "#865DFF" }}
+          sx={{
+            fontSize: { xs: "4rem", sm: "5rem", md: "7rem" },
+            fontWeight: "bold",
+            color: "#865DFF",
+          }}
         >
           4
         </Typography>
       </Box>
-      <Typography sx={{ fontSize: "3rem", fontWeight: "bold", color: "black" }}>
-        {" "}
-        Ooops! Pagina no encontrada{" "}
+      <Typography
+        sx={{
+          fontSize: { xs: "2rem", sm: "2.5rem", md: "3rem" },
+          fontWeight: "bold",
+          color: "black",
+          mt: 2,
+        }}
+      >
+        Ooops! Página no encontrada
       </Typography>
-      <Button onClick={goHome} variant="contained" size="large" sx={{mt:3, bgcolor:"#865DFF", '&:hover':{bgcolor: "#571FFF"}}}>
+      <Button
+        onClick={goHome}
+        variant="contained"
+        size="large"
+        sx={{
+          mt: 3,
+          bgcolor: "#865DFF",
+          '&:hover': { bgcolor: "#571FFF" },
+          fontSize: { xs: "1rem", sm: "1.25rem", md: "1.5rem" },
+        }}
+      >
         Ir al inicio
       </Button>
     </Box>
