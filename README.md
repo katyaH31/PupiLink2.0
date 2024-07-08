@@ -7,6 +7,7 @@ PupiLink es una aplicación de codigo abierto diseñada para ayudar a los estudi
 - [Instalación](#instalación)
 - [Uso](#uso)
 - [Características](#características)
+- [Colaboradores](#colaboradores)
 - [Contribuyendo](#contribuyendo)
 - [Licencia](#licencia)
 
@@ -54,6 +55,15 @@ Esto lanzará el servidor de desarrollo y abrirá la aplicación en tu navegador
 - Gestión de Contenido: Crear, editar y eliminar publicaciones de renta de pupilaje
 - Interfaz Interactiva: Interfaz amigable para una mejor interacción del usuario.
 - Diseño Responsivo: Funciona en varios dispositivos y tamaños de pantalla.
+
+## Colaboradores
+| Nombre                                 | Correo        |
+|----------------------------------------|-----------|
+| Karla Marcela Portillo Ramirez         | 00079419  |
+| Kenia Ivette Flores Hernandez          | 00120620  |
+| Omar Alfredo Vasquez Escamilla         | 00023620  |
+| Katya Lisbeth Herrera Molina           | 00188119  |
+
 
 ## Contribuyendo
 ¡Damos la bienvenida a contribuciones de la comunidad! Para contribuir, sigue estos pasos:
