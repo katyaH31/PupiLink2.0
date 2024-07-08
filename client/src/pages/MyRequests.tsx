@@ -66,7 +66,7 @@ const MyRequests: React.FC = () => {
   };
 
   return (
-    <div className="container mx-auto px-4">
+    <div className="container mx-auto px-4 mt-20">
       <h1 className="text-2xl font-bold my-4">Tus Solicitudes</h1>
       <div className="space-y-4">
         {requests.map(request => {
