@@ -19,13 +19,18 @@ interface Lodging {
   image: string;
 }
 
-interface Location {
+interface LodgingRequest {
   id: string;
-  name: string;
+  status: string;
+  proposedPrice: number;
+  applicant: string;
+  lodging: string;
+  created: string;
 }
 
 const MyAds: React.FC = () => {
   const [lodgings, setLodgings] = useState<Lodging[]>([]);
+  const [requests, setRequests] = useState<LodgingRequest[]>([]);
   const toastOptions: ToastOptions = {
     position: "top-right",
     autoClose: 5000,
@@ -42,13 +47,22 @@ const MyAds: React.FC = () => {
         const userId = pb.authStore.model?.id;
         if (!userId) throw new Error('User not authenticated');
 
-        const records = await pb.collection('lodging').getFullList<Lodging>({
+        // Fetch user lodgings
+        const lodgingRecords = await pb.collection('lodging').getFullList<Lodging>({
           filter: `owner='${userId}'`,
           sort: '-created',
         });
-        setLodgings(records);
+        setLodgings(lodgingRecords);
+
+        // Fetch requests for user's lodgings
+        const requestRecords = await pb.collection('lodgingRequest').getFullList<LodgingRequest>({
+          filter: `lodging.owner='${userId}'`,
+          expand: 'lodging',
+          sort: '-created',
+        });
+        setRequests(requestRecords);
       } catch (error) {
-        console.error('Error fetching lodgings:', error);
+        console.error('Error fetching lodgings or requests:', error);
       }
     };
 
@@ -67,6 +81,27 @@ const MyAds: React.FC = () => {
     } catch (error) {
       console.error('Error deleting lodging:', error);
       toast.error('Error al eliminar el anuncio', {
+        ...toastOptions,
+        style: { backgroundColor: 'white', color: 'red' },
+        progressStyle: { backgroundColor: 'red' }
+      });
+    }
+  };
+
+  const handleUpdateRequestStatus = async (id: string, status: string) => {
+    try {
+      await pb.collection('lodgingRequest').update(id, { status });
+      setRequests(prevRequests =>
+        prevRequests.map(req => (req.id === id ? { ...req, status } : req))
+      );
+      toast.success(`Solicitud ${status.toLowerCase()} con éxito`, {
+        ...toastOptions,
+        style: { backgroundColor: 'white', color: 'green' },
+        progressStyle: { backgroundColor: 'green' }
+      });
+    } catch (error) {
+      console.error(`Error updating request status:`, error);
+      toast.error(`Error al ${status.toLowerCase()} la solicitud`, {
         ...toastOptions,
         style: { backgroundColor: 'white', color: 'red' },
         progressStyle: { backgroundColor: 'red' }
@@ -102,12 +137,45 @@ const MyAds: React.FC = () => {
           </button>
         </div>
       ))}
+      <h2 className="text-2xl font-bold mb-4">Solicitudes Recibidas</h2>
+      {requests.map((request) => (
+        <div key={request.id} className="bg-white p-4 rounded-lg shadow-md mb-4 flex items-center">
+          <img
+            src={pb.files.getUrl(request.expand.lodging, request.expand.lodging.image)}
+            alt={request.expand.lodging.title}
+            className="w-20 h-20 object-cover rounded-md mr-4"
+          />
+          <div className="flex-1">
+            <h3 className="font-bold text-custom-purple mb-2">{request.expand.lodging.title}</h3>
+            <p className="text-gray-600">Estado: {request.status}</p>
+            <p className="text-gray-600">Precio Propuesto: ${request.proposedPrice}</p>
+            <p className="text-gray-600">Fecha de Creación: {new Date(request.created).toLocaleDateString()}</p>
+          </div>
+          {request.status === 'SENT' && (
+            <div className="flex space-x-2">
+              <button
+                onClick={() => handleUpdateRequestStatus(request.id, 'ACCEPTED')}
+                className="bg-green-500 text-white px-4 py-2 rounded hover:bg-green-700"
+              >
+                Aceptar
+              </button>
+              <button
+                onClick={() => handleUpdateRequestStatus(request.id, 'REJECTED')}
+                className="bg-red-500 text-white px-4 py-2 rounded hover:bg-red-700"
+              >
+                Rechazar
+              </button>
+            </div>
+          )}
+        </div>
+      ))}
       <ToastContainer />
     </div>
   );
 };
 
 export default MyAds;
+
 
 
 
