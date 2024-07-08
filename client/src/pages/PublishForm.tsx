@@ -248,7 +248,7 @@ const PublishForm = () => {
                 Agrega un título corto a tu publicación para que sea fácil de leer
                 para los interesados
               </Typography>
-              <TextInput name="title" control={control} />
+              <TextInput name="title" control={control} multiline />
             </Box>
             <Box>
               <Typography sx={formTitleStyle}>Descripción</Typography>
