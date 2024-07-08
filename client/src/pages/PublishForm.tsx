@@ -24,7 +24,7 @@ import {
   Typography
 } from "@mui/material";
 import { DatePicker } from "@mui/x-date-pickers";
-import { useCallback, useState } from "react";
+import { useCallback, useState, useRef, useEffect } from "react";
 import { useDropzone } from "react-dropzone";
 import { Controller, useForm } from "react-hook-form";
 import addImageIcon from "../assets/addImage.svg";
@@ -42,7 +42,8 @@ import { PublishLodgingRequest, PublishLodgingSchema } from "../utils/PublishLod
 import LodgingService from '../services/LodgingService';
 import { useNavigate } from 'react-router-dom';
 import PupilinkRoutes from '../enums/PupilinkRoutes';
-import { MapContainer, TileLayer } from "react-leaflet";
+import { MapContainer, TileLayer, useMapEvent, Marker, Popup } from "react-leaflet";
+import { toast, ToastOptions } from 'react-toastify';
 import NavbarUser from '../components/NavbarUser';
 
 const formTitleStyle: SxProps = {
@@ -133,19 +134,75 @@ const lodgingTypeRadioOptions: RadioGroupType<LodgingType>[] = [
 ]
 
 const PublishForm = () => {
+  const [coordinates, setCoordinates] = useState(null);
   const [image, setImage] = useState<string | null>(null);
   const { handleSubmit, control, setValue, formState: { errors } } = useForm<PublishLodgingRequest>({ resolver: zodResolver(PublishLodgingSchema) });
   const navigate = useNavigate();
+  const markerRef = useRef(null);
+
+  const toastOptions: ToastOptions = {
+    position: "top-right",
+    autoClose: 5000,
+    hideProgressBar: false,
+    closeOnClick: true,
+    pauseOnHover: true,
+    draggable: true,
+    progress: undefined,
+  };
 
   const clearImage = () => {
     setImage(null);
     setValue("image", null);
   }
 
-  const onSubmit = async (data: PublishLodgingRequest) => {
-    const response = await LodgingService.createLodging(data);
-    navigate(PupilinkRoutes.ROOT);
+  const ClickHandler = ({ setCoordinates }) => {
+    useMapEvent("click", (event) => {
+      const { lat, lng } = event.latlng;
+      setCoordinates({ lat: lat.toString(), lng: lng.toString() });
+    });
+    return null;
   };
+
+  useEffect(() => {
+    if (markerRef.current) {
+      markerRef.current.openPopup();
+    }
+  }, [coordinates]);
+
+  const onSubmit = async (data: PublishLodgingRequest) => {
+    try {
+      data.latitude = coordinates?.lat ? coordinates.lat : "0";
+      data.longitude = coordinates?.lng ? coordinates.lng : "0";
+
+      const response = await LodgingService.createLodging(data);
+
+      toast.success("Alojamiento publicado con exito", {
+        ...toastOptions,
+        style: { backgroundColor: "white", color: "green" },
+        progressStyle: { backgroundColor: "green" },
+      });
+      setTimeout(() => {
+        navigate(PupilinkRoutes.ROOT);
+      }, 1000);
+    } catch (error) {
+      toast.error("Error al registrar alojamiento", {
+        ...toastOptions,
+        style: { backgroundColor: "white", color: "red" },
+        progressStyle: { backgroundColor: "red" },
+      });
+      console.error(error);
+    }
+  };
+
+  useEffect(() => {
+    if (Object.keys(errors).length > 0) {
+      toast.error("Por favor revisa que todos los campos esten llenos", {
+        ...toastOptions,
+        style: { backgroundColor: "white", color: "red" },
+        progressStyle: { backgroundColor: "red" },
+      });
+    }
+  }, [errors]);
 
   const onDrop = useCallback((acceptedFiles: File[]) => {
     const file = acceptedFiles[0];
@@ -564,13 +621,25 @@ const PublishForm = () => {
           </Typography>
         </Grid>
         <Grid item xs={12} sx={{ height: { xs: "40vh", md: "calc(50vh - 50px)" } }}>
-          <MapContainer center={[13.6989, -89.1914]} zoom={9}
-            style={{ height: "90%", width: "99%" }}
-          >
+          <MapContainer center={[13.6989, -89.1914]} zoom={9} style={{ height: "90%", width: "99%" }}>
             <TileLayer
               url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
               attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
             />
+            <ClickHandler setCoordinates={setCoordinates} />
+            {coordinates && (
+              <Marker
+                position={[coordinates.lat, coordinates.lng]}
+                ref={markerRef}
+              >
+                <Popup>
+                  <Typography sx={{ ...formDescriptionStyle }}>
+                    La dirección ingresada posee coordenadas de Latitud:{" "}
+                    {coordinates.lat} y Longitud: {coordinates.lng}
+                  </Typography>
+                </Popup>
+              </Marker>
+            )}
           </MapContainer>
         </Grid>
 
@@ -583,3 +652,4 @@ const PublishForm = () => {
 };
 
 export default PublishForm;
+

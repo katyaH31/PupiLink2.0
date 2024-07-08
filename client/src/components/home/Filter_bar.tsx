@@ -43,7 +43,7 @@ const Filter_bar: React.FC<FilterProps> = ({ onFilterChange }) => {
       sx={{
         display: "flex",
         flexDirection: "column",
-        margin: "2rem",
+        marginBlockStart: "1.5rem",
         gap: 2,
         alignItems: "center",
       }}

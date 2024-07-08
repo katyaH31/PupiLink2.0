@@ -8,10 +8,16 @@ export default function Pupi_card_map_select({ lodging, location }) {
   const imageUrl = pb.files.getUrl(lodging, lodging.image);
 
   return (
-    <Box component="div" sx={{ minWidth: 240 }}>
+    <Box component="div" sx={{ minWidth: 230 }}>
       <CardMedia
         component="img"
-        sx={{ height: "100%", width: "100%", objectFit: "cover" }}
+        sx={{
+          height: "auto", 
+          maxWidth: "100%", 
+          width: 1600,  
+          maxHeight: 1060, 
+          objectFit: "cover" 
+        }}
         image={imageUrl}
         alt="image"
       />

@@ -25,11 +25,11 @@ const Home: React.FC = () => {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gray-100 relative">
+    <div className="min-h-screen flex flex-col items-center justify-center bg-gray-100 w-full">
       <Navbar />
-      <div className="text-center">
-        <Box sx={{ marginBottom: 4 }}>
-          <Typography sx={{ fontSize: { xs: "24px", md: "30px" }, fontFamily: "Barlow Condensed" }}>
+      <div className="text-center flex flex-col items-center w-full max-w-screen-lg">
+        <Box sx={{ marginTop: 8, marginBottom: 4, width: '100%' }}>
+          <Typography sx={{ fontSize: { xs: "24px", md: "30px" }, fontFamily: "Barlow Condensed", fontWeight: "bold", color: '#686D76' }}>
             ¿Buscas pupilaje? <span style={{ color: "#724DFF", fontWeight: "bold" }}>¡cuenta con nosotros!</span>
           </Typography>
         </Box>
@@ -42,6 +42,7 @@ const Home: React.FC = () => {
 };
 
 export default Home;
+
 
 
 

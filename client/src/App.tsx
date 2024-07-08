@@ -13,7 +13,7 @@ import { LocalizationProvider } from "@mui/x-date-pickers";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { ToastContainer} from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import LodgingMap from "./pages/LodgingMap";
+
 
 function App() {
   const router = createBrowserRouter([
@@ -42,10 +42,6 @@ function App() {
     {
       path: PupilinkRoutes.PUBLISH_FORM,
       element: <PublishForm/>,
-    },
-    {
-      path: PupilinkRoutes.LODGING_MAP,
-      element: <LodgingMap />,
     },
   ]);
 

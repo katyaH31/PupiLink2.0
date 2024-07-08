@@ -1,7 +1,13 @@
-import { Box, Grid } from "@mui/material";
+import { Box, Divider, Grid, Typography } from "@mui/material";
 import { useEffect, useState } from "react";
 import Pupi_Card from "./Pupi_Card";
 import pb from "../../server/Connection";
+import markerIconPng from "leaflet/dist/images/marker-icon.png";
+import markerShadowPng from "leaflet/dist/images/marker-shadow.png";
+import "leaflet/dist/leaflet.css";
+import L from "leaflet";
+import { MapContainer, TileLayer, Marker, Popup } from "react-leaflet";
+import Pupi_card_map_select from "../Pupi_card_map_select";
 
 interface Lodging {
   id: string;
@@ -43,27 +49,29 @@ export default function Pupi_card_grid({ filters }: Pupi_card_gridProps) {
   useEffect(() => {
     const fetchLodgings = async () => {
       try {
-        const records = await pb.collection('lodging').getFullList<Lodging>({
-          sort: '-created',
+        const records = await pb.collection("lodging").getFullList<Lodging>({
+          sort: "-created",
         });
         setLodgings(records);
       } catch (error) {
-        console.error('Error fetching lodgings:', error);
+        console.error("Error fetching lodgings:", error);
       }
     };
 
     const fetchLocations = async () => {
       try {
-        const locationRecords = await pb.collection('location').getFullList<Location>({
-          sort: '-created',
-        });
+        const locationRecords = await pb
+          .collection("location")
+          .getFullList<Location>({
+            sort: "-created",
+          });
         const locationDict: Record<string, Location> = {};
-        locationRecords.forEach(location => {
+        locationRecords.forEach((location) => {
           locationDict[location.id] = location;
         });
         setLocations(locationDict);
       } catch (error) {
-        console.error('Error fetching locations:', error);
+        console.error("Error fetching locations:", error);
       }
     };
 
@@ -71,7 +79,7 @@ export default function Pupi_card_grid({ filters }: Pupi_card_gridProps) {
     fetchLocations();
   }, []);
 
-  const filteredLodgings = lodgings.filter(lodging => {
+  const filteredLodgings = lodgings.filter((lodging) => {
     if (filters.city && locations[lodging.location]?.name !== filters.city) {
       return false;
     }
@@ -88,15 +96,91 @@ export default function Pupi_card_grid({ filters }: Pupi_card_gridProps) {
   });
 
   return (
-    <Box sx={{ display: "flex", width: '100%', padding: 3 }}>
-      <Grid container spacing={3}>
+    <Grid container spacing={2} 
+      sx={{
+        display: "flex",
+        width: "full",
+        height: "auto",
+        flexDirection: "column",
+        alignItems: "center",
+        justifyContent: "center",
+        marginLeft: "5px",
+      }}
+    >
+      <Grid container spacing={2} sx={{ margin: "20px" }}>
         {filteredLodgings.map((lodging) => (
-          <Grid item xs={12} sm={6} md={4} lg={4} key={lodging.id}>
-            <Pupi_Card lodging={lodging} location={locations[lodging.location]} />
+          <Grid item xs={10} sm={6} md={4} lg={4} key={lodging.id}>
+            <Pupi_Card
+              lodging={lodging}
+              location={locations[lodging.location]}
+            />
           </Grid>
         ))}
       </Grid>
-    </Box>
+      <Typography
+        sx={{
+          m: 1,
+          fontSize: "2rem",
+          fontFamily: "Barlow Condensed",
+          fontWeight: "bold",
+          color: "#865DFF",
+        }}
+      >
+        COMPRUEBA LOS PUPILAJES DISPONIBLES{" "}
+      </Typography>
+      <Divider
+        orientation="horizontal"
+        sx={{
+          border: "0.5px solid #865DFF",
+          width: "70%  !important",
+        }}
+      />
+      <Divider />
+      <Grid
+        style={{
+          width: "100%",
+          height: "450px",
+          marginTop: "10px",
+          marginBottom: "10px",
+        }}
+      >
+        <MapContainer
+          center={[13.794185, -88.89653]}
+          zoom={9}
+          style={{ height: "100%", width: "100%" }}
+        >
+          <TileLayer
+            url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+            attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+          />
+          {filteredLodgings.map((lodging) => {
+            const location = locations[lodging.location];
+            if (!location) return null;
+            const position = [location.latitude, location.longitude];
+            return (
+              <Marker
+                position={position}
+                key={lodging.id}
+                icon={L.icon({
+                  iconUrl: markerIconPng,
+                  iconSize: [25, 41],
+                  iconAnchor: [12, 41],
+                  popupAnchor: [1, -34],
+                  shadowUrl: markerShadowPng,
+                  shadowSize: [41, 41],
+                })}
+              >
+                <Popup>
+                  <Pupi_card_map_select
+                    lodging={lodging}
+                    location={locations[lodging.location]}
+                  />
+                </Popup>
+              </Marker>
+            );
+          })}
+        </MapContainer>
+      </Grid>
+    </Grid>
   );
 }
-
