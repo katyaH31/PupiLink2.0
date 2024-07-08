@@ -83,3 +83,4 @@ Para acceder al manual de usuario usar este link
 
 ## Licencia
 Este proyecto está licenciado bajo la Licencia MIT. Consulta el archivo [LICENSE](LICENSE) para más detalles.
+
