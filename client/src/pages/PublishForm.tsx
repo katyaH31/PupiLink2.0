@@ -43,7 +43,7 @@ import LodgingService from '../services/LodgingService';
 import { useNavigate } from 'react-router-dom';
 import PupilinkRoutes from '../enums/PupilinkRoutes';
 import { MapContainer, TileLayer,  useMapEvent, Marker, Popup} from "react-leaflet";
-import { toast, ToastContainer, ToastOptions } from 'react-toastify';
+import { toast, ToastOptions } from 'react-toastify';
 
 const formTitleStyle: SxProps = {
   fontFamily: "Barlow Condensed, Arial",

@@ -3,7 +3,8 @@ import { Link, useNavigate } from 'react-router-dom';
 import pb from '../server/Connection';
 import logo from '../assets/PupiLinks_menu.png';
 import DehazeIcon from '@mui/icons-material/Dehaze';
-
+import { Button, Typography } from "@mui/material";
+import PupilinkRoutes from '../enums/PupilinkRoutes';
 interface User {
   id: string;
   name: string;
@@ -42,28 +43,59 @@ const Navbar: React.FC = () => {
     navigate('/');
   };
 
+  const handlePushishForm = () =>{
+    navigate(PupilinkRoutes.PUBLISH_FORM);
+  }
+
+
   const toggleMenu = () => {
     setMenuOpen(!menuOpen);
   };
 
   return (
-    <nav className="bg-white opacity-2 p-4 flex justify-between items-center fixed top-0 left-0 w-full z-50">
+    <nav className="bg-white opacity-2 p-1 flex justify-between items-center fixed top-0 left-0 w-full z-30">
       <div className="flex items-center">
         <img src={logo} alt="Logo" className="h-12" /> {/* Aumentar tamaño del logo */}
-        <span className="text-3xl font-barlow px-10">Publica tu propiedad</span>
+        <Button
+                onClick={handlePushishForm}
+                sx={{
+                  fontSize: "1.3rem",
+                  fontFamily: "Barlow Condensed",
+                  fontWeight: "bold",
+                  textAlign: "left",
+                 marginLeft:"1rem",
+                  color: "#686D76",
+                  overflow: "hidden",
+                  textOverflow: "ellipsis",
+                  whiteSpace: "nowrap",
+                  maxWidth: "90%",
+                }}>Publica tu propiedad</Button>
       </div>
       <div className="flex items-center relative">
         {user ? (
           <>
-            <span className="text-3xl font-barlow mr-4">Hola, {user.name}</span>
+            <Typography
+                sx={{
+                  fontSize: "1.5rem",
+                  fontFamily: "Barlow Condensed",
+                  fontWeight: "bold",
+                  textAlign: "left",
+                 marginRight:"1rem",
+                  color: "#865DFF",
+                  overflow: "hidden",
+                  textOverflow: "ellipsis",
+                  whiteSpace: "nowrap",
+                  maxWidth: "90%",
+                }}>Hola, {user.name}</Typography>
+
             <button onClick={toggleMenu} className="text-gray-600">
               <DehazeIcon style={{ color: 'gray' }} />
             </button>
             {menuOpen && (
               <div ref={menuRef} className="absolute right-0 mt-2 w-48 bg-white rounded-md shadow-lg z-20" style={{ top: '2.5rem' }}>
-                <Link to="/tus-solicitudes" className="font-barlowc text-xl block px-4 py-2 text-gray-800 hover:bg-gray-200">Tus solicitudes</Link>
-                <Link to="/tus-anuncios" className="font-barlowc text-xl block px-4 py-2 text-gray-800 hover:bg-gray-200">Tus anuncios</Link>
-                <button onClick={handleLogout} className="font-barlowc text-xl w-full text-left block px-4 py-2 text-gray-800 hover:bg-gray-200">Cerrar sesión</button>
+                <Link to="/tus-solicitudes" className="font-barlowc  text-lg font-bold block px-4  text-left py-2 text-gray-600 hover:bg-gray-200">Tus solicitudes</Link>
+                <Link to="/tus-anuncios" className="font-barlowc text-lg block font-bold px-4 py-2 text-left  text-gray-600 hover:bg-gray-200">Tus anuncios</Link>
+                <button onClick={handleLogout} className="font-barlowc text-lg font-bold w-full text-left block px-4 py-2 text-gray-600 hover:bg-gray-200">Cerrar sesión</button>
               </div>
             )}
           </>
