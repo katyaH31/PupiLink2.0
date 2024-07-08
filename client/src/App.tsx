@@ -45,10 +45,6 @@ function App() {
       element: <PublishForm/>,
     },
     {
-      path: PupilinkRoutes.LODGING_MAP,
-      element: <LodgingMap />,
-    },
-    {
       path: PupilinkRoutes.MY_REQUESTS, // Añade esta línea
       element: <MyRequests />,
     },
