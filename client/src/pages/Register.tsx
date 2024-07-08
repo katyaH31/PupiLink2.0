@@ -2,17 +2,19 @@ import React, { useState } from "react";
 import logo from "../assets/PupiLinks_menu.png";
 import AlternateEmailIcon from '@mui/icons-material/AlternateEmail';
 import KeyIcon from '@mui/icons-material/Key';
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import pb from "../server/Connection.ts";  
 import { toast, ToastContainer, ToastOptions } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import PupilinkRoutes from "../enums/PupilinkRoutes.ts";
+import AuthService from "../services/AuthService.ts";
 
 const Register: React.FC = () => {
-    const [selectedRole, setSelectedRole] = useState<'Inquilino' | 'Propietario'>('Inquilino');
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [passwordConfirm, setPasswordConfirm] = useState('');
     const [name, setName] = useState('');
+    const navigate = useNavigate();
 
     const toastOptions: ToastOptions = {
         position: "top-right",
@@ -41,13 +43,15 @@ const Register: React.FC = () => {
                 password,
                 passwordConfirm,
                 name,
-                role: selectedRole
             });
             toast.success('Usuario registrado con éxito', {
                 ...toastOptions,
                 style: { backgroundColor: 'white', color: 'green' },
                 progressStyle: { backgroundColor: 'green' }
             });
+
+            await AuthService.login(email, password);
+            navigate(PupilinkRoutes.ROOT);
         } catch (error) {
             toast.error('Error al registrar usuario', {
                 ...toastOptions,
@@ -65,20 +69,6 @@ const Register: React.FC = () => {
                 <div className="flex flex-col items-center mb-4">
                     <div className="flex justify-center mb-4">
                         <span className="text-gray-500 text-lg font-medium">Registrarse</span>
-                    </div>
-                    <div className="flex justify-between w-full mb-4">
-                        <button
-                            className={`flex-1 text-center text-gray-500 border-b-2 ${selectedRole === 'Inquilino' ? 'border-custom-purple' : 'border-transparent'}`}
-                            onClick={() => setSelectedRole('Inquilino')}
-                        >
-                            Inquilino
-                        </button>
-                        <button
-                            className={`flex-1 text-center text-gray-500 border-b-2 ${selectedRole === 'Propietario' ? 'border-custom-purple' : 'border-transparent'}`}
-                            onClick={() => setSelectedRole('Propietario')}
-                        >
-                            Propietario
-                        </button>
                     </div>
                 </div>
                 <div className="flex justify-center mb-4">
