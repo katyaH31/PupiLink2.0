@@ -25,7 +25,7 @@ const ChatWindow: React.FC = () => {
   }, []);
 
   return (
-    <Box sx={{ zIndex: '1000' }} >
+    <Box  >
       {!isChatOpen && (
         <button
           className="fixed bottom-4 right-4 bg-custom-purple text-white p-4 rounded-full shadow-lg w-[48px] h-[48px] flex items-center justify-center"
@@ -35,7 +35,7 @@ const ChatWindow: React.FC = () => {
         </button>
       )}
       {isChatOpen && (
-        <div className="fixed bottom-4 right-4 bg-custom-purple text-white rounded-lg shadow-lg overflow-hidden w-[400px] h-[calc(52vh-64px)] flex flex-col">
+        <Box sx={{ zIndex: '9999' }} className="fixed bottom-4 right-4 bg-custom-purple text-white rounded-lg shadow-lg overflow-hidden w-[400px] h-[calc(52vh-64px)] flex flex-col">
           <div className="flex justify-end p-2 bg-custom-purple">
             <button
               className="hover:text-custom-purple"
@@ -51,7 +51,7 @@ const ChatWindow: React.FC = () => {
               <ChatModal chat={chatList.find((chat) => chat.id === selectedChatId)!} onBackToList={handleBackToList} />
             )}
           </div>
-        </div>
+        </Box>
       )}
     </Box>
   );
