@@ -15,6 +15,7 @@ import { ToastContainer} from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import LodgingMap from "./pages/LodgingMap";
 import MyRequests from "./pages/MyRequests";
+import MyAds from "./pages/MyAds";
 
 function App() {
   const router = createBrowserRouter([
@@ -48,12 +49,14 @@ function App() {
       path: PupilinkRoutes.LODGING_MAP,
       element: <LodgingMap />,
     },
-
     {
       path: PupilinkRoutes.MY_REQUESTS, // Añade esta línea
       element: <MyRequests />,
     },
-    
+    {
+      path: PupilinkRoutes.MY_ADS,
+      element: <MyAds />,
+    },
   ]);
 
   return (

@@ -6,7 +6,8 @@ enum PupilinkRoutes {
   FORGOT_PASSWORD = "/forgot-password",
   LODGING_DETAILS = "/details/:id",
   LODGING_MAP = "/lodging_map",
-  MY_REQUESTS = "/myrequests"
+  MY_REQUESTS = "/myrequests",
+  MY_ADS = "/my-ads"
 }
 
 export default PupilinkRoutes;

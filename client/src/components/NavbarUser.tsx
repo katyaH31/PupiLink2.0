@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import logo from '../assets/PupiLinks_menu.png';
-
+//No se usa para en ningun lado este navbar usar el otro
 const NavbarUser: React.FC = () => {
   const [isAuthenticated, setIsAuthenticated] = useState<boolean>(false);
   const [name, setName] = useState('');
