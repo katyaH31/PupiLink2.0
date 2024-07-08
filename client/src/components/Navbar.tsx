@@ -55,7 +55,10 @@ const Navbar: React.FC = () => {
   return (
     <nav className="bg-white opacity-2 p-1 flex justify-between items-center fixed top-0 left-0 w-full z-30">
       <div className="flex items-center">
-        <img src={logo} alt="Logo" className="h-12" /> {/* Aumentar tamaño del logo */}
+      <Link to="/">
+  <img src={logo} alt="Logo" className="h-12" />
+</Link>
+
         <Button
                 onClick={handlePushishForm}
                 sx={{
@@ -86,6 +89,9 @@ const Navbar: React.FC = () => {
                   textOverflow: "ellipsis",
                   whiteSpace: "nowrap",
                   maxWidth: "90%",
+                  '@media (max-width: 600px)': {
+                    display: 'none',
+                  },
                 }}>Hola, {user.name}</Typography>
 
             <button onClick={toggleMenu} className="text-gray-600">
@@ -93,14 +99,14 @@ const Navbar: React.FC = () => {
             </button>
             {menuOpen && (
               <div ref={menuRef} className="absolute right-0 mt-2 w-48 bg-white rounded-md shadow-lg z-20" style={{ top: '2.5rem' }}>
-                <Link to="/myrequests" className="font-barlowc text-xl block px-4 py-2 text-gray-800 hover:bg-gray-200">Tus solicitudes</Link>
-                <Link to="/my-ads" className="font-barlowc text-xl block px-4 py-2 text-gray-800 hover:bg-gray-200">Tus anuncios</Link>
-                <button onClick={handleLogout} className="font-barlowc text-xl w-full text-left block px-4 py-2 text-gray-800 hover:bg-gray-200">Cerrar sesión</button>
+                <Link to="/myrequests" className="font-barlowc text-lg font-bold block px-4 py-2 text-gray-500 hover:bg-gray-200">Tus solicitudes</Link>
+                <Link to="/my-ads" className="font-barlowc text-lg font-bold block px-4 py-2 text-gray-500 hover:bg-gray-200">Tus anuncios</Link>
+                <button onClick={handleLogout} className="font-barlowc text-lg font-bold w-full text-left  px-4 py-2 text-gray-500 hover:bg-gray-200">Cerrar sesión</button>
               </div>
             )}
           </>
         ) : (
-          <Link to="/login" className="bg-custom-purple text-white px-4 py-2 rounded hover:bg-hover_colors">Iniciar Sesión</Link>
+          <Link to="/login" className="bg-custom-purple font-barlowc text-sm font-bold text-white px-4 py-2 rounded hover:bg-hover_colors">Iniciar Sesión</Link>
         )}
       </div>
     </nav>

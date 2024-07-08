@@ -104,7 +104,7 @@ const LodgingDetails = () => {
 
   const handleReservation = async () => {
     if (!proposedPrice) {
-      toast("Por favor, proporcione un precio");
+      toast.error("Por favor, proporcione un precio");
       return;
     }
 
@@ -112,10 +112,10 @@ const LodgingDetails = () => {
       proposedPrice: proposedPrice!,
       lodging: id!,
     }).then(() => {
-      toast("Solicitud realizada con exito");
+      toast.success("Solicitud realizada con exito");
       navigate(PupilinkRoutes.ROOT);
     }).catch(() => {
-      toast("No puede solicitar una reserva más de una vez");
+      toast.error("No puede solicitar una reserva más de una vez");
     });
     
   };
@@ -130,7 +130,7 @@ const LodgingDetails = () => {
     setProposedPrice(lodging.price);
   }, [lodging]);
   return (
-    <Grid sx={{ bgcolor: "#F5F5F5" }} container spacing={1}>
+    <Grid    sx={{ bgcolor: "#F5F5F5" }} container spacing={3}>
       <Grid
         item
         xs={5}
@@ -139,18 +139,19 @@ const LodgingDetails = () => {
           display: "flex",
           justifyContent: "center",
           alignItems: "center",
+        
         }}
       >
         <Box
           component={"img"}
           alt="lodging image"
           sx={{
-            width: "95%",
-            height: "95%",
+            width: "80%",
+            height: "80%",
             borderRadius: "10px",
             objectFit: "fill",
             marginInline: "auto",
-            mt: "1.25rem",
+            mt: "2rem",
             maxHeight: "31rem",
           }}
           src={lodging.image}
@@ -164,6 +165,7 @@ const LodgingDetails = () => {
             fontSize: "2rem",
             fontWeight: "500",
             color: "#686D76",
+            marginTop:"3.5rem"
           }}
         >
           {lodging.title}

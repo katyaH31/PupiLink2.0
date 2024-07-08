@@ -221,7 +221,7 @@ const PublishForm = () => {
 
   return (
     <>
-      <NavbarUser />
+      
       <Grid
         component={"form"}
         onSubmit={handleSubmit(onSubmit)}
