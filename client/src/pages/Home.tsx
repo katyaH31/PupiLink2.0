@@ -36,7 +36,7 @@ const Home: React.FC = () => {
         <Filter_bar onFilterChange={handleFilterChange} />
         <Pupi_card_grid filters={filters} />
       </div>
-      <ChatWindow />
+      
     </div>
   );
 };

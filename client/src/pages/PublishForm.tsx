@@ -44,7 +44,7 @@ import { useNavigate } from 'react-router-dom';
 import PupilinkRoutes from '../enums/PupilinkRoutes';
 import { MapContainer, TileLayer, useMapEvent, Marker, Popup } from "react-leaflet";
 import { toast, ToastOptions } from 'react-toastify';
-import NavbarUser from '../components/NavbarUser';
+import Navbar from '../components/Navbar';
 
 const formTitleStyle: SxProps = {
   fontFamily: "Barlow Condensed, Arial",
@@ -221,7 +221,7 @@ const PublishForm = () => {
 
   return (
     <>
-      <NavbarUser />
+      <Navbar/>
       <Grid
         component={"form"}
         onSubmit={handleSubmit(onSubmit)}

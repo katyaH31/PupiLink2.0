@@ -10,7 +10,7 @@ const ChatWindow: React.FC = () => {
     const chats = [
         { id: 1, name: 'Vendedor 1', lastMessage: '¡Hola! ¿Cómo podemos ayudarte?', avatar: '/path-to-avatar.png', time: '16 sem' },
         { id: 2, name: 'Vendedor 2', lastMessage: '¿Cómo puedo ayudar?', avatar: '/path-to-avatar.png', time: '25 sem' },
-        { id: 3, name: 'Vendedor 3', lastMessage: 'Que putas queres ', avatar: '/path-to-avatar.png', time: '31 sem' },
+        { id: 3, name: 'Vendedor 3', lastMessage: 'Hola', avatar: '/path-to-avatar.png', time: '31 sem' },
     ];
 
     const handleSelectChat = (id: number) => {
