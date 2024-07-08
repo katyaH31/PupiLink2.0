@@ -9,6 +9,7 @@ PupiLink es una aplicación de codigo abierto diseñada para ayudar a los estudi
 - [Características](#características)
 - [Colaboradores](#colaboradores)
 - [Contribuyendo](#contribuyendo)
+- [Manual](#manual)
 - [Licencia](#licencia)
 
 
@@ -74,6 +75,11 @@ Esto lanzará el servidor de desarrollo y abrirá la aplicación en tu navegador
 4. Realiza un commit de tus cambios (git commit -am 'Añadir una característica').
 5. Haz push a la rama (git push origin feature-branch).
 6. Crea un nuevo Pull Request.
+
+## Manual
+Para acceder al manual de usuario usar este link
+[Manual de usuario](https://docs.google.com/document/d/1cBFC-8fZAsFsdRX1troRGLGr7JuG6OzW/edit?usp=sharing&ouid=100275994940324620004&rtpof=true&sd=true)
+
 
 ## Licencia
 Este proyecto está licenciado bajo la Licencia MIT. Consulta el archivo [LICENSE](LICENSE) para más detalles.
