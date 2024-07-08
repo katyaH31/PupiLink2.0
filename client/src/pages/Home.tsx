@@ -1,9 +1,9 @@
 import React, { useState } from 'react';
 import ChatWindow from '../components/ChatWindow';
-import NavbarUser from '../components/NavbarUser';
 import Pupi_card_grid from '../components/home/Pupi_card_grid';
 import Filter_bar from '../components/home/Filter_bar';
 import { Box, Typography } from "@mui/material";
+import Navbar from '../components/Navbar';
 
 interface Filters {
   city: string;
@@ -25,9 +25,9 @@ const Home: React.FC = () => {
   };
 
   return (
-    <div className="min-h-screen flex flex-col items-center justify-center bg-gray-100 relative p-4 md:p-8 pt-[4rem] md:pt-[6rem]">
-      <NavbarUser />
-      <div className="w-full max-w-7xl text-center mt-[4rem]">
+    <div className="min-h-screen flex items-center justify-center bg-gray-100 relative">
+      <Navbar />
+      <div className="text-center">
         <Box sx={{ marginBottom: 4 }}>
           <Typography sx={{ fontSize: { xs: "24px", md: "30px" }, fontFamily: "Barlow Condensed" }}>
             ¿Buscas pupilaje? <span style={{ color: "#724DFF", fontWeight: "bold" }}>¡cuenta con nosotros!</span>
@@ -42,6 +42,7 @@ const Home: React.FC = () => {
 };
 
 export default Home;
+
 
 
 
