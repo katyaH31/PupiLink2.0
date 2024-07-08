@@ -2,7 +2,9 @@ import React, { useEffect, useState } from 'react';
 import pb from '../server/Connection';
 import { toast, ToastContainer, ToastOptions } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
+import AuthService from '../services/AuthService';
+import PupilinkRoutes from '../enums/PupilinkRoutes';
 
 interface Lodging {
   id: string;
@@ -31,6 +33,8 @@ interface LodgingRequest {
 const MyAds: React.FC = () => {
   const [lodgings, setLodgings] = useState<Lodging[]>([]);
   const [requests, setRequests] = useState<LodgingRequest[]>([]);
+  const navigate = useNavigate();
+
   const toastOptions: ToastOptions = {
     position: "top-right",
     autoClose: 5000,
@@ -108,6 +112,12 @@ const MyAds: React.FC = () => {
       });
     }
   };
+
+  useEffect(() => {
+    if (!AuthService.isLoggedIn()) {
+      navigate(PupilinkRoutes.LOGIN);
+    }
+  }, [])
 
   return (
     <div className="min-h-screen bg-gray-100 p-4">

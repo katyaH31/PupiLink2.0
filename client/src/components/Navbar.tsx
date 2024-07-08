@@ -5,11 +5,13 @@ import logo from '../assets/PupiLinks_menu.png';
 import DehazeIcon from '@mui/icons-material/Dehaze';
 import { Button, Typography } from "@mui/material";
 import PupilinkRoutes from '../enums/PupilinkRoutes';
+import AuthService from '../services/AuthService';
 
 interface User {
   id: string;
   name: string;
   email: string;
+  surname: string;
   // Añade otros campos relevantes si es necesario
 }
 
@@ -45,7 +47,7 @@ const Navbar: React.FC = () => {
   };
 
   const handlePushishForm = () =>{
-    navigate(PupilinkRoutes.PUBLISH_FORM);
+    navigate(AuthService.isLoggedIn() ? PupilinkRoutes.PUBLISH_FORM : PupilinkRoutes.LOGIN);
   }
 
   const toggleMenu = () => {
@@ -91,9 +93,9 @@ const Navbar: React.FC = () => {
                 '@media (max-width: 600px)': {
                   display: 'none',
                 },
-              }}>Hola, {user.name}</Typography>
+              }}>{`Hola, ${user.name} ${user.surname}`}</Typography>
 
-            <button onClick={toggleMenu} className="text-gray-600">
+            <button onClick={toggleMenu} className="text-gray-600 mr-4">
               <DehazeIcon style={{ color: 'gray' }} />
             </button>
             {menuOpen && (

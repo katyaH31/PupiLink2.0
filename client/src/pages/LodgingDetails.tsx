@@ -7,6 +7,7 @@ import ExitToAppIcon from "@mui/icons-material/ExitToApp";
 import {
   Box,
   Button,
+  CircularProgress,
   Divider,
   Grid,
   InputAdornment,
@@ -29,6 +30,7 @@ import LodgingUtils from "../utils/LodgingUtils";
 import moment from "moment";
 import "moment/locale/es";
 import { toast } from "react-toastify";
+import ChatService from "../services/ChatService";
 
 const MOCK: Lodging = {
   id: "1",
@@ -99,6 +101,7 @@ moment.locale("es", {
 const LodgingDetails = () => {
   const [lodging, setLodging] = useState(MOCK);
   const [proposedPrice, setProposedPrice] = useState<number | null>(null);
+  const [isLoading, setIsLoading] = useState(true);
   const { id } = useParams();
   const navigate = useNavigate();
 
@@ -111,7 +114,8 @@ const LodgingDetails = () => {
     LodginRequestService.requestLodging({
       proposedPrice: proposedPrice!,
       lodging: id!,
-    }).then(() => {
+    }).then(() => ChatService.createChat(lodging.title, lodging.expand?.owner?.id!))
+    .then(() => {
       toast.success("Solicitud realizada con exito");
       navigate(PupilinkRoutes.ROOT);
     }).catch(() => {
@@ -121,14 +125,22 @@ const LodgingDetails = () => {
   };
 
   useEffect(() => {
-    if (id) {
-      LodgingService.getLodging(id).then((lodging) => setLodging(lodging));
+    if (!!id) {
+      LodgingService.getLodging(id)
+      .then((lodging) => setLodging(lodging))
+      .catch(() => navigate('/404'))
+      .finally(() => setIsLoading(false));
     }
   }, [id]);
 
   useEffect(() => {
     setProposedPrice(lodging.price);
   }, [lodging]);
+
+  if (isLoading) {
+    return <CircularProgress />;
+  }
+
   return (
     <Grid    sx={{ bgcolor: "#F5F5F5" }} container spacing={3}>
       <Grid
@@ -331,7 +343,7 @@ const LodgingDetails = () => {
           >
             <Box component={"pre"}>
               <Typography sx={{ ...descriptionStyle, ml: "1.5rem" }}>
-                {lodging.coexistenceRules}
+                {!lodging.coexistenceRules || lodging.coexistenceRules === 'undefined' ? '': lodging.coexistenceRules }
               </Typography>
             </Box>
           </Stack>

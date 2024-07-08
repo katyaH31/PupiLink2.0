@@ -35,8 +35,7 @@ const Home: React.FC = () => {
         </Box>
         <Filter_bar onFilterChange={handleFilterChange} />
         <Pupi_card_grid filters={filters} />
-      </div>
-      {AuthService.isLoggedIn() && <ChatWindow />}       
+      </div>       
     </div>
   );
 };

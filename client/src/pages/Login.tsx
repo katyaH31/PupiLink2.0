@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import logo from '../assets/PupiLinks_menu.png';
 import { Link, useNavigate } from 'react-router-dom';
 import AlternateEmailIcon from '@mui/icons-material/AlternateEmail';
@@ -6,6 +6,8 @@ import KeyIcon from '@mui/icons-material/Key';
 import pb from '../server/Connection.ts';
 import { toast, ToastContainer, ToastOptions } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import AuthService from '../services/AuthService.ts';
+import PupilinkRoutes from '../enums/PupilinkRoutes.ts';
 
 const Login: React.FC = () => {
     const [email, setEmail] = useState('');
@@ -45,6 +47,12 @@ const Login: React.FC = () => {
             console.error(error);
         }
     };
+
+    useEffect(() => {
+        if (AuthService.isLoggedIn()) {
+            navigate(PupilinkRoutes.ROOT);
+        }
+    }, [])
 
     return (
         <div className="min-h-screen flex items-center justify-center bg-gray-100 font-barlow">

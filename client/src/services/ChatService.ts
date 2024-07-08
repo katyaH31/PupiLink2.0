@@ -87,4 +87,13 @@ export default class ChatService {
       "messages+": message.id,
     });
   }
+
+  static async createChat(title: string, lodgingOwner: string) {
+    const toUploadChat = {
+      title,
+      participants: [AuthService.getUserData().id!, lodgingOwner],
+    }
+    
+    await pb.collection(Collections.CHAT).create(toUploadChat);
+  }
 }

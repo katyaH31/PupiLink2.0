@@ -59,6 +59,7 @@ export default class LodgingService {
   };
 
   public static async getLodging(id: string): Promise<Lodging> {
+    pb.autoCancellation(false);
     const lodging: Lodging = await pb.collection(Collections.LODGING).getOne(id, {
       expand: "owner,location,extras",
     }); 

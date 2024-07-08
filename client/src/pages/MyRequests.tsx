@@ -2,6 +2,9 @@ import React, { useEffect, useState } from 'react';
 import pb from '../server/Connection';
 import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import AuthService from '../services/AuthService';
+import PupilinkRoutes from '../enums/PupilinkRoutes';
+import { useNavigate } from 'react-router-dom';
 
 interface Request {
   id: string;
@@ -20,6 +23,7 @@ interface Lodging {
 const MyRequests: React.FC = () => {
   const [requests, setRequests] = useState<Request[]>([]);
   const [lodgings, setLodgings] = useState<{ [key: string]: Lodging }>({});
+  const navigate = useNavigate();
 
   useEffect(() => {
     const fetchRequests = async () => {
@@ -53,6 +57,12 @@ const MyRequests: React.FC = () => {
 
     fetchRequests();
   }, []);
+
+  useEffect(() => {
+    if (!AuthService.isLoggedIn()) {
+      navigate(PupilinkRoutes.LOGIN);
+    }
+  }, [])
 
   const handleCancelRequest = async (requestId: string) => {
     try {

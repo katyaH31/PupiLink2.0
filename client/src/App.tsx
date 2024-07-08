@@ -1,21 +1,23 @@
 import { CssBaseline, ThemeProvider } from "@mui/material";
-import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
-import PupilinkRoutes from "./enums/PupilinkRoutes";
-import Home from "./pages/Home";
-import DefaultTheme from "./themes/DefaultTheme";
-import NotFound from "./pages/NotFound";
-import Register from "./pages/Register";
-import Login from "./pages/Login";
-import ForgotPassword from "./pages/ForgotPassword";
-import LodgingDetails from "./pages/LodgingDetails";
-import PublishForm from "./pages/PublishForm";
 import { LocalizationProvider } from "@mui/x-date-pickers";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
+import { Route, BrowserRouter as Router, Routes } from "react-router-dom";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import MyRequests from "./pages/MyRequests";
-import MyAds from "./pages/MyAds";
+import ChatWindow from "./components/ChatWindow";
 import Navbar from "./components/Navbar";
+import PupilinkRoutes from "./enums/PupilinkRoutes";
+import ForgotPassword from "./pages/ForgotPassword";
+import Home from "./pages/Home";
+import LodgingDetails from "./pages/LodgingDetails";
+import Login from "./pages/Login";
+import MyAds from "./pages/MyAds";
+import MyRequests from "./pages/MyRequests";
+import NotFound from "./pages/NotFound";
+import PublishForm from "./pages/PublishForm";
+import Register from "./pages/Register";
+import AuthService from "./services/AuthService";
+import DefaultTheme from "./themes/DefaultTheme";
 
 function App() {
   return (
@@ -36,8 +38,9 @@ function App() {
             <Route path={PupilinkRoutes.REGISTER} element={<Register />} />
             <Route path={PupilinkRoutes.LOGIN} element={<Login />} />
             <Route path={PupilinkRoutes.FORGOT_PASSWORD} element={<ForgotPassword />} />
-            
+
             {/*404 Route */}
+            <Route path="/404" element={<NotFound />} />
             <Route path="*" element={<NotFound />} />
           </Routes>
         </Router>
@@ -46,11 +49,16 @@ function App() {
   );
 }
 
+interface LayoutProps {
+  children: React.ReactNode;
+}
 
-const LayoutWithNavbar = ({ children }) => (
+
+const LayoutWithNavbar = ({ children }: LayoutProps) => (
   <>
     <Navbar />
     {children}
+    {AuthService.isLoggedIn() && <ChatWindow />}
   </>
 );
 

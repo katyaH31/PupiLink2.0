@@ -174,7 +174,8 @@ const PublishForm = () => {
       data.latitude = coordinates?.lat ? coordinates.lat : "0";
       data.longitude = coordinates?.lng ? coordinates.lng : "0";
 
-      const response = await LodgingService.createLodging(data);
+      const response = await LodgingService.creat
+      eLodging(data);
 
       toast.success("Alojamiento publicado con exito", {
         ...toastOptions,
