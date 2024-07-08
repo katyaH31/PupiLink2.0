@@ -52,12 +52,13 @@ const Filter_bar: React.FC<FilterProps> = ({ onFilterChange }) => {
       <Box
         sx={{
           display: "flex",
-          flexDirection: "row",
+          flexDirection: { xs: "column", md: "row" },
           gap: 2,
           alignItems: "center",
+          width: "100%",
         }}
       >
-        <FormControl sx={{ minWidth: 300 }}>
+        <FormControl sx={{ minWidth: { xs: 200, md: 300 }, flex: 1 }}>
           <TextField
             label="Precio Mínimo"
             type="number"
@@ -73,7 +74,7 @@ const Filter_bar: React.FC<FilterProps> = ({ onFilterChange }) => {
             }
           />
         </FormControl>
-        <FormControl sx={{ minWidth: 300 }}>
+        <FormControl sx={{ minWidth: { xs: 200, md: 300 }, flex: 1 }}>
           <TextField
             label="Precio Máximo"
             type="number"
@@ -89,7 +90,7 @@ const Filter_bar: React.FC<FilterProps> = ({ onFilterChange }) => {
             }
           />
         </FormControl>
-        <FormControl sx={{ minWidth: 300 }}>
+        <FormControl sx={{ minWidth: { xs: 200, md: 300 }, flex: 1 }}>
           <InputLabel id="type-select-label">Tipo de lugar</InputLabel>
           <Select
             labelId="type-select-label"
@@ -99,16 +100,12 @@ const Filter_bar: React.FC<FilterProps> = ({ onFilterChange }) => {
             onChange={(e) => setType(e.target.value)}
             startAdornment={<HomeIcon sx={{ mr: 1, color: "#686D76" }} />}
           >
-            <MenuItem value="">
-              Todos
-            </MenuItem>
+            <MenuItem value="">Todos</MenuItem>
             <MenuItem value="APARTMENT">Apartamento</MenuItem>
             <MenuItem value="STUDIO">Estudio</MenuItem>
             <MenuItem value="HOUSE">Casa</MenuItem>
             <MenuItem value="ROOM">Habitación</MenuItem>
-            <MenuItem value="STUDENT_RESIDENCE">
-              Residencia estudiantil
-            </MenuItem>
+            <MenuItem value="STUDENT_RESIDENCE">Residencia estudiantil</MenuItem>
           </Select>
         </FormControl>
       </Box>
@@ -117,8 +114,8 @@ const Filter_bar: React.FC<FilterProps> = ({ onFilterChange }) => {
         sx={{
           background: "#865DFF",
           borderRadius: "5rem",
-          width: "20rem",
-          fontSize: "20px",
+          width: { xs: "15rem", md: "20rem" },
+          fontSize: { xs: "16px", md: "20px" },
           "&:hover": { bgcolor: "#571FFF" },
         }}
         startIcon={<ScreenSearchDesktopIcon />}
