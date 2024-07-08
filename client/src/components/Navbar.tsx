@@ -41,7 +41,7 @@ const Navbar: React.FC = () => {
   const handleLogout = () => {
     pb.authStore.clear();
     setUser(null);
-    navigate('/');
+    navigate(PupilinkRoutes.LOGIN, { replace: true });
   };
 
   const handlePushishForm = () =>{

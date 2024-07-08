@@ -23,7 +23,6 @@ function App() {
       <LocalizationProvider dateAdapter={AdapterDayjs}>
         <CssBaseline />
         <ToastContainer />
-
         <Router>
           <Routes>
             {/* Private Routes*/}

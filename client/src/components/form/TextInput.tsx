@@ -25,7 +25,7 @@ const TextInput = <T extends FieldValues>(props: Props<T>) => {
             multiline={props.multiline}
             id="outlined-basic"
             variant="outlined"
-            sx={{ fontFamily: "Barlow Condensed, Arial", maxWidth: props.multiline ? "100%" : '30rem', '& .MuiOutlinedInput-root': { bgcolor: "#dcdce8" } }}
+            sx={{ fontFamily: "Barlow Condensed, Arial", width: "100%", maxWidth: props.multiline ? "100%" : '30rem', '& .MuiOutlinedInput-root': { bgcolor: "#dcdce8" } }}
             inputProps={{
               sx: { fontSize: "0.88rem", paddingBlock: "0.25rem", bgcolor: "#dcdce8", },
             }}

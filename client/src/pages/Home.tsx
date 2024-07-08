@@ -3,6 +3,7 @@ import ChatWindow from '../components/ChatWindow';
 import Pupi_card_grid from '../components/home/Pupi_card_grid';
 import Filter_bar from '../components/home/Filter_bar';
 import { Box, Typography } from "@mui/material";
+import AuthService from '../services/AuthService';
 
 
 interface Filters {
@@ -35,7 +36,7 @@ const Home: React.FC = () => {
         <Filter_bar onFilterChange={handleFilterChange} />
         <Pupi_card_grid filters={filters} />
       </div>
-      <ChatWindow />      
+      {AuthService.isLoggedIn() && <ChatWindow />}       
     </div>
   );
 };
