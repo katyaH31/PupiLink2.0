@@ -1,3 +1,10 @@
+## 📌 Nota sobre el repositorio
+
+Este repositorio fue originalmente un fork de [MarcelaPortillo/PupiLink](https://github.com/MarcelaPortillo/PupiLink).  
+Al final del desarrollo, el equipo decidió realizar la confirmación de **"Leave fork network"** para desvincularlo del repositorio original y convertirlo en un proyecto independiente.  
+
+Esta decisión se tomó ya que somos un grupo colaborativo que continuará trabajando y evolucionando la aplicación de forma autónoma, por lo que era necesario tener un repositorio propio donde podamos gestionar ramas, issues y pull requests sin dependencia del repositorio inicial.
+
 # PupiLink
 
 PupiLink es una aplicación de codigo abierto diseñada para ayudar a los estudiantes a encontrar pupilaje de manera mas facil
@@ -48,6 +55,11 @@ PupiLink es una aplicación de codigo abierto diseñada para ayudar a los estudi
 6. Iniciar la aplicacion con:
     ```sh
     npm run dev
+    ```
+    
+7. instalando definiciones de tipo TypeScript para la librería Leaflet:
+    ```sh
+    npm install --save-dev @types/leaflet
     ```
 Esto lanzará el servidor de desarrollo y abrirá la aplicación en tu navegador web predeterminado.
 
