@@ -1,6 +1,6 @@
 import AlternateEmailIcon from '@mui/icons-material/AlternateEmail';
 import KeyIcon from '@mui/icons-material/Key';
-import { Box } from "@mui/material";
+import { Box, Typography  } from "@mui/material";
 import React, { useCallback, useEffect, useState } from "react";
 import { useDropzone } from "react-dropzone";
 import { Link, useNavigate } from "react-router-dom";
@@ -89,6 +89,25 @@ const Register: React.FC = () => {
         <div className="min-h-screen flex items-center justify-center bg-white font-barlow">
             <div className="bg-white p-6 rounded-lg shadow-lg max-w-sm w-full">
                 <ToastContainer />
+
+                        <Typography
+                        variant="body2" // O el tamaño de tipografía que prefieras
+                        sx={{
+                            color: '#724DFF', // Color del texto
+                            textAlign: 'center',
+                            // Puedes ajustar la posición o tamaño del texto si es necesario
+                            // Por ejemplo, para que no se superponga con la imagen si hay una preview pequeña
+                            position: 'relative',
+                            zIndex: 1, // Asegura que el texto esté sobre el logo por defecto si lo hay
+                            top: '50%',
+                            left: '50%',
+                            transform: 'translate(-50%, -50%)',
+                            visibility: imagePreview ? 'hidden' : 'visible', // Oculta el texto si hay una imagen previa
+                            maxWidth: '80%', // Para que el texto no se desborde del círculo
+                        }}
+                    >
+                        Suba su foto de perfil
+                </Typography>
                 <Box
                     {...getRootProps({ className: 'dropzone' })}
                     sx={{
@@ -99,9 +118,12 @@ const Register: React.FC = () => {
                         marginInline: 'auto',
                         my: 3,
                         cursor: 'pointer',
+                        
                     }}
                 >
+
                     <Box component={"input"} {...getInputProps()} />
+                    
                     <Box
                         component={"img"}
                         src={imagePreview ?? logo}
