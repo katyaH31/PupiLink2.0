@@ -10,6 +10,17 @@ class AuthService {
       .then(() => pb.authStore.isValid);
   }
 
+  async loginWithGoogle(): Promise<boolean> {
+    const provider = "google";
+    const redirectUrl = window.location.origin + "/oauth-callback"; // Debes crear esta ruta en tu frontend
+
+    
+    await pb.collection(Collections.USERS).authWithOAuth2({ provider, url: redirectUrl });
+
+  
+    return pb.authStore.isValid;
+  }
+
   // Function to change password
   async changePassword(
     email: string,
