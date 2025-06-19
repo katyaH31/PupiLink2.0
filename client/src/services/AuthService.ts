@@ -10,14 +10,30 @@ class AuthService {
       .then(() => pb.authStore.isValid);
   }
 
-  async loginWithGoogle(): Promise<boolean> {
+  async loginWithGoogle(idToken: string): Promise<boolean> {
     const provider = "google";
     const redirectUrl = window.location.origin + "/oauth-callback"; // Debes crear esta ruta en tu frontend
 
-    
-    await pb.collection(Collections.USERS).authWithOAuth2({ provider, url: redirectUrl });
+    console.log('OAuth2 redirect_uri:', redirectUrl);
+    await pb.collection(Collections.USERS).authWithOAuth2({ provider, url: redirectUrl, idToken });
 
-  
+    return pb.authStore.isValid;
+  }
+
+  async registerWithGoogle(idToken: string): Promise<boolean> {
+    // Si usas PocketBase con OAuth2:
+    const provider   = 'google';
+    const redirectUrl = window.location.origin + '/oauth-callback';
+    
+    // Le pasas el idToken al método de PocketBase:
+    await pb
+      .collection('users')
+      .authWithOAuth2({
+        provider,
+        url: redirectUrl,
+        idToken
+      });
+
     return pb.authStore.isValid;
   }
 
