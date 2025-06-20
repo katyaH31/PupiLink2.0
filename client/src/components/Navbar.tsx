@@ -12,6 +12,7 @@ interface User {
   name: string;
   email: string;
   surname: string;
+  username: string;
   // Añade otros campos relevantes si es necesario
 }
 
@@ -46,7 +47,7 @@ const Navbar: React.FC = () => {
     navigate(PupilinkRoutes.LOGIN, { replace: true });
   };
 
-  const handlePushishForm = () =>{
+  const handlePushishForm = () => {
     navigate(AuthService.isLoggedIn() ? PupilinkRoutes.PUBLISH_FORM : PupilinkRoutes.LOGIN);
   }
 
@@ -67,7 +68,7 @@ const Navbar: React.FC = () => {
             fontFamily: "Barlow Condensed",
             fontWeight: "bold",
             textAlign: "left",
-            marginLeft:"1rem",
+            marginLeft: "1rem",
             color: "#686D76",
             overflow: "hidden",
             textOverflow: "ellipsis",
@@ -84,7 +85,7 @@ const Navbar: React.FC = () => {
                 fontFamily: "Barlow Condensed",
                 fontWeight: "bold",
                 textAlign: "left",
-                marginRight:"1rem",
+                marginRight: "1rem",
                 color: "#865DFF",
                 overflow: "hidden",
                 textOverflow: "ellipsis",
@@ -93,7 +94,11 @@ const Navbar: React.FC = () => {
                 '@media (max-width: 600px)': {
                   display: 'none',
                 },
-              }}>{`Hola, ${user.name} ${user.surname}`}</Typography>
+              }}>{<span>
+                {user.name || user.surname
+                  ? `Hola ${user.name} ${user.surname}`
+                  : `Hola ${user.username}`}
+              </span>}</Typography>
 
             <button onClick={toggleMenu} className="text-gray-600 mr-4">
               <DehazeIcon style={{ color: 'gray' }} />
