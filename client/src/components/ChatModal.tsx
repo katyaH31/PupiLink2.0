@@ -54,7 +54,7 @@ const ChatModal: React.FC<ChatProps> = ({ chat, onBackToList }) => {
                 </button>
                 <div className="flex items-center">
                     <div className="mr-3">
-                        <p className="text-white font-bold">{chat.expand?.participants?.find((participant) => participant.id !== userId.current!)?.name}</p>
+                        <p className="text-white font-bold">{chat.expand?.participants?.find((participant) => participant.id == userId.current!)?.name}</p>
                     </div>
                     <div className="w-10 h-10 bg-white rounded-full flex items-center justify-center">
                         <AccountCircleIcon className="text-gray-800 full" />

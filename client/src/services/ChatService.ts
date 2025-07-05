@@ -36,9 +36,8 @@ export default class ChatService {
 
   static getChatAvatar(chat: Chat): string {
     const participant: User | undefined = chat.expand?.participants?.find(
-      (participant) => participant.id !== AuthService.getUserData().id
+      (participant) => participant.id == AuthService.getUserData().id
     );
-
     if (!participant) {
       return "https://cdn-icons-png.flaticon.com/512/149/149071.png";
     }
