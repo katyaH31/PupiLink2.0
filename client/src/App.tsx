@@ -39,6 +39,8 @@ function App() {
             <Route path={PupilinkRoutes.LOGIN} element={<Login />} />
             <Route path={PupilinkRoutes.FORGOT_PASSWORD} element={<ForgotPassword />} />
 
+            <Route path="/oauth-callback" element={<div>Autenticando con Google…</div>}/>
+
             {/*404 Route */}
             <Route path="/404" element={<NotFound />} />
             <Route path="*" element={<NotFound />} />
