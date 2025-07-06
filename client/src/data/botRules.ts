@@ -45,7 +45,6 @@ export const botRules: BotRule[] = [
       "precio de publicar",
       "cuánto cuesta poner en alquiler",
       "cuánto vale publicar",
-      
     ],
     response: "¡Publicar es completamente gratis! No cobramos ninguna comisión.",
   },
@@ -139,9 +138,9 @@ const badWords = [
 const normalizeText = (text: string): string => {
   return text
     .toLowerCase()
-    .normalize("NFD") // Descompone caracteres acentuados en base y diacrítico
-    .replace(/[\u0300-\u036f]/g, "") // Elimina diacríticos (acentos)
-    .replace(/[¿?¡!.,;:]/g, "") // Elimina puntuación
+    .normalize("NFD") 
+    .replace(/[\u0300-\u036f]/g, "") 
+    .replace(/[¿?¡!.,;:]/g, "") 
     .trim();
 };
 
@@ -165,10 +164,10 @@ export const getBotResponse = (message: string): string | null => {
     for (const ruleKeyword of normalizedRuleKeywords) {
       // Si la frase normalizada del usuario contiene la palabra clave normalizada de la regla
       if (normalizedMessage.includes(ruleKeyword)) {
-        // Incrementa la cuenta por la coincidencia de una frase clave completa
+
         currentMatchedKeywords += ruleKeyword.split(/\s+/).filter(word => word.length > 0).length; // Suma las palabras de la frase clave
       } else {
-        // Intenta coincidir palabras individuales de la palabra clave con palabras de la frase del usuario
+        // Intenta coincidir palabras individuales
         const ruleKeywordWords = ruleKeyword.split(/\s+/).filter(word => word.length > 0);
         let individualWordMatches = 0;
         for (const rkWord of ruleKeywordWords) {
@@ -178,14 +177,13 @@ export const getBotResponse = (message: string): string | null => {
         }
         if (individualWordMatches > 0) {
             // Asigna un peso menor a las coincidencias de palabras individuales
-            currentMatchedKeywords += individualWordMatches * 0.5; // Por ejemplo, medio punto por palabra individual
+            currentMatchedKeywords += individualWordMatches * 0.3; 
         }
       }
     }
 
     // Un umbral mínimo para considerar una coincidencia
-    // Podrías ajustar este umbral (ej. 1, 1.5, 2)
-    const threshold = 1; 
+    const threshold = 1.5; 
 
     if (currentMatchedKeywords > maxMatchedKeywords && currentMatchedKeywords >= threshold) {
       maxMatchedKeywords = currentMatchedKeywords;
@@ -193,6 +191,6 @@ export const getBotResponse = (message: string): string | null => {
     }
   }
 
-  // Si no se encuentra una coincidencia fuerte, devuelve null para que Ollama se encargue
+  // Si no se encuentra una coincidencia, Ollama se encargue
   return bestMatch?.response ?? null;
 };
