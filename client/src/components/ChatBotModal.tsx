@@ -1,9 +1,8 @@
 import React, { useEffect, useRef, useState } from "react";
-import { getBotResponse } from "../data/botRules"; // <-- Asegúrate de que esta línea exista y sea correcta
+import { getBotResponse } from "../data/botRules"; 
 import pupibotIcon from "../assets/pupibot.png";
 import ClearIcon from "@mui/icons-material/Clear";
-import axios from "axios"; // <-- Asegúrate de que esta línea exista
-
+import axios from "axios"; 
 
 type ChatMessage = {
   sender: "user" | "bot" | "typing";
@@ -13,6 +12,9 @@ type ChatMessage = {
 interface ChatBotModalProps {
   onClose: () => void;
 }
+const LOCAL_STORAGE_KEY = "pupibot_chat_history";
+// Límite de mensajes
+const MAX_HISTORY_MESSAGES = 20;
 
 const ChatBotModal: React.FC<ChatBotModalProps> = ({ onClose }) => {
   const [messages, setMessages] = useState<ChatMessage[]>([]);
@@ -23,21 +25,48 @@ const ChatBotModal: React.FC<ChatBotModalProps> = ({ onClose }) => {
   const OLLAMA_API_BASE_URL = "http://localhost:11434/api/chat"; 
   const OLLAMA_MODEL = "phi3"; //model Ollama
 
+  
   useEffect(() => {
-    setMessages([
-      {
-        sender: "bot",
-        text: "¡Hola! 👋 ¿Tenés dudas sobre PupiLink? Escribime y te ayudo. 😊",
-      },
-    ]);
-  }, []);
+    try {
+      const storedMessages = localStorage.getItem(LOCAL_STORAGE_KEY);
+      let parsedMessages: ChatMessage[] = [];
 
+      if (storedMessages) {
+        parsedMessages = JSON.parse(storedMessages);
+        
+        setMessages([
+          {
+            sender: "bot",
+            text: "¡Hola! 👋 ¿Tenés dudas sobre PupiLink? Escribime y te ayudo. 😊",
+          },
+        ]);
+      } else {
+       
+        setMessages(parsedMessages.filter(msg => msg.sender !== "typing"));
+      }
+    } catch (error) {
+      console.error("Error al cargar el historial desde localStorage:", error);
+      // En caso de error, inicializa con el mensaje de bienvenida
+      setMessages([
+        {
+          sender: "bot",
+          text: "¡Hola! 👋 ¿Tenés dudas sobre PupiLink? Escribime y te ayudo. 😊",
+        },
+      ]);
+    }
+  }, []); 
+
+  //  Guardar historial cada vez que 'messages' cambia ---
   useEffect(() => {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
-  }, [messages]);
+    const messagesToSave = messages
+                                .filter(msg => msg.sender !== "typing")
+                                .slice(Math.max(0, messages.length - MAX_HISTORY_MESSAGES)); // Limita la cantidad de mensajes
+    localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(messagesToSave));
+  }, [messages]); 
 
   const handleSend = async () => {
-    // <--- Asegúrate de que sea async
+ 
     if (!input.trim()) return;
 
     const userMessage: ChatMessage = { sender: "user", text: input };
@@ -51,16 +80,16 @@ const ChatBotModal: React.FC<ChatBotModalProps> = ({ onClose }) => {
 
     let botReply: string | null = null; // Variable para almacenar la respuesta del bot
 
-    // --- PASO 1: INTENTAR RESPONDER CON LAS REGLAS PREDEFINIDAS ---
-    const ruleBasedResponse = getBotResponse(currentInput); // <-- USO DE getBotResponse AQUÍ
+
+    const ruleBasedResponse = getBotResponse(currentInput); // <-- getBotResponse AQUÍ
 
     if (ruleBasedResponse) {
       // Si se encontró una respuesta basada en reglas, úsala
       botReply = ruleBasedResponse;
     } else {
-      // --- PASO 2: SI NO HAY REGLAS, IR A OLLAMA (IA GENERATIVA) ---
+   
       try {
-        // 1. Prepara el System Prompt para Ollama
+        // System Prompt para Ollama
         const systemPromptContent =
           "Eres PupiBot, un asistente virtual experto y conciso en el área de pupilajes y el uso de la plataforma PupiLink. Responde de forma breve y directa a las preguntas, centrándote solo en el tema de los pupilajes y PupiLink. Si la pregunta no está relacionada, di amablemente que solo puedes ayudar con temas de PupiLink.";
 
@@ -72,7 +101,7 @@ const ChatBotModal: React.FC<ChatBotModalProps> = ({ onClose }) => {
           },
         ];
 
-        // 2. Añade los mensajes existentes de la conversación (filtrando el "typing")
+
         messages
           .filter((msg) => msg.sender !== "typing")
           .forEach((msg) => {
@@ -82,12 +111,11 @@ const ChatBotModal: React.FC<ChatBotModalProps> = ({ onClose }) => {
             });
           });
 
-        // 3. Añade el mensaje actual del usuario
+        
         conversationHistory.push({ role: "user", content: currentInput });
 
         // Llama a la API de Ollama
         const response = await axios.post(OLLAMA_API_BASE_URL, {
-          // <-- USO DE OLLAMA_API_BASE_URL y OLLAMA_MODEL AQUÍ
           model: OLLAMA_MODEL,
           messages: conversationHistory,
           stream: false,
@@ -101,7 +129,6 @@ const ChatBotModal: React.FC<ChatBotModalProps> = ({ onClose }) => {
       }
     }
 
-    // --- PASO 3: ACTUALIZAR LOS MENSAJES EN LA UI ---
     const finalBotMessage: ChatMessage = botReply
       ? { sender: "bot", text: botReply }
       : {
@@ -123,7 +150,7 @@ const ChatBotModal: React.FC<ChatBotModalProps> = ({ onClose }) => {
 
   return (
     <div className="flex flex-col h-full bg-white text-black">
-      {/* Header completo con X incluida */}
+      {}
       <div className="bg-custom-purple text-white px-4 py-2 flex items-center justify-between">
         <div className="flex items-center gap-2">
           <img
@@ -188,11 +215,3 @@ const ChatBotModal: React.FC<ChatBotModalProps> = ({ onClose }) => {
 };
 
 export default ChatBotModal;
-
-
-
-
-
-
-
-
