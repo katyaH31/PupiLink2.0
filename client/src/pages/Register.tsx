@@ -10,6 +10,7 @@ import logo from "../assets/PupiLinks_menu.png";
 import PupilinkRoutes from "../enums/PupilinkRoutes.ts";
 import pb from "../server/Connection.ts";
 import AuthService from "../services/AuthService.ts";
+import { GoogleLogin, CredentialResponse } from '@react-oauth/google';
 
 const Register: React.FC = () => {
     const [email, setEmail] = useState('');
@@ -77,6 +78,35 @@ const Register: React.FC = () => {
             });
             console.error(error);
         }
+    };
+
+    const handleGoogleRegisterSuccess = async (resp: CredentialResponse) => {
+        if (!resp.credential) return;
+        try {
+            await AuthService.registerWithGoogle(resp.credential);
+            toast.success('Registro con Google exitoso', {
+            ...toastOptions,
+            style: { backgroundColor: 'white', color: 'green' },
+            progressStyle: { backgroundColor: 'green' }
+            });
+            navigate(PupilinkRoutes.ROOT);
+        } catch (err) {
+            toast.error('Error al registrarse con Google', {
+            ...toastOptions,
+            style: { backgroundColor: 'white', color: 'red' },
+            progressStyle: { backgroundColor: 'red' }
+            });
+            console.error(err);
+        } 
+    };
+
+    const handleGoogleRegisterError = () => {
+    toast.error('Error al registrarse con Google', {
+        ...toastOptions,
+        style: { backgroundColor: 'white', color: 'red' },
+        progressStyle: { backgroundColor: 'red' }
+    });
+    console.error('Google Register Error');
     };
 
     useEffect(() => {
@@ -191,6 +221,16 @@ const Register: React.FC = () => {
                         Registrarse
                     </button>
                 </form>
+
+                <div className="my-4 text-center">o</div>
+                <div className="flex justify-center mb-4">
+                    <GoogleLogin
+                        text="signup_with"           // fuerza “Registrarte con Google”
+                        onSuccess={handleGoogleRegisterSuccess}
+                        onError={handleGoogleRegisterError}
+                        useOneTap
+                    />
+                </div>
 
                 <div className="mt-4 text-center">
                     <span className="text-gray-700">¿Ya tienes cuenta? </span>

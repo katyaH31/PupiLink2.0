@@ -1,0 +1,48 @@
+# Información detallada sobre PupiLink y Pupilajes
+---
+
+## 3. Gestión de Pupilajes
+
+### 3.1. Creación de Pupilajes (Publicar una Propiedad)
+
+Una vez que tu registro sea exitoso, serás ubicado en la página de inicio.
+Para crear nuevos anuncios de pupilajes:
+
+* Dirígete a la parte superior y haz clic en "Publicar tu propiedad".
+* Se desplegará un formulario que deberás llenar con los detalles de tu anuncio. Una vez completado, tu anuncio será publicado.
+
+#### Detalles para Publicar una Propiedad:
+
+* **Costo:** La publicación es completamente **GRATIS**. No cobramos ninguna comisión por la publicación ni por las transacciones.
+* **Tipos de Propiedad:** Puedes publicar habitaciones, apartamentos compartidos o casas completas.
+* **Ubicación Precisa:** En el campo de ubicación, tienes la flexibilidad de ingresar:
+    * El nombre del lugar.
+    * Una dirección específica (ej: San Benito, San Salvador).
+    * Para mayor exactitud, puedes usar **coordenadas geográficas (latitud, longitud)**.
+    * Dispones de un mapa interactivo para ayudarte a seleccionar la ubicación visualmente.
+* **Otros Detalles Requeridos:** Descripción, fotos, precio mensual, servicios incluidos (Wi-Fi, luz, agua, gas), reglas de convivencia y disponibilidad.
+
+### 3.2. Ver Mis Anuncios
+
+Para revisar las publicaciones que has realizado:
+
+* Haz clic en "Tus Anuncios" desde el menú.
+* Aquí verás todos los anuncios que has publicado, junto con las solicitudes que han enviado a tus propiedades.
+
+### 3.3. Ver Mis Solicitudes
+
+Para revisar las solicitudes de pupilajes que has realizado:
+
+* Accede al menú y selecciona el apartado "Mis solicitudes".
+* Se desplegará una vista con todas las solicitudes de pupilajes que has enviado.
+* Si una solicitud ha sido aceptada, aparecerá con el **ESTADO: ACCEPTED**.
+
+---
+
+## 4. Funcionalidades de Búsqueda y Visualización
+
+### 4.1. Mapa de Pupilajes
+
+En la página de inicio también encontrarás un mapa interactivo. Este mapa te permite ver la ubicación exacta de todos los pupilajes disponibles en la plataforma.
+
+* **Búsqueda por Ubicación:** Puedes buscar directamente en el mapa ingresando el nombre del lugar, una dirección específica o, si lo prefieres, **coordenadas (latitud, longitud)** en el campo de búsqueda de dirección.

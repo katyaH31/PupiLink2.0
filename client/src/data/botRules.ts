@@ -9,19 +9,15 @@ export const botRules: BotRule[] = [
     keywords: [
       "cómo publico",
       "publicar propiedad",
-      "quiero alquilar mi lugar",
       "subir un anuncio",
       "poner en alquiler",
       "quisiera publicar",
-      "deseo publicar",
       "me gustaría publicar",
       "quiero publicar",
-      "cómo puedo publicar",
-      "quiero subir una propiedad",
       "cómo poner mi propiedad",
       "cómo alquilar mi propiedad"
     ],
-    response: "Para publicar tu propiedad, hacé clic en 'Publica tu propiedad' desde el menú superior.",
+    response: "Para publicar tu propiedad, hacé clic en 'Publica tu propiedad' desde el menú superior, te dirigirá a un formulario donde podrás ingresar los detalles de tu anuncio.",
   },
   {
     keywords: [
@@ -32,14 +28,17 @@ export const botRules: BotRule[] = [
       "contactar al arrendador",
       "cómo me comunico con el propietario"
     ],
-    response: "Se habilitará un chat con el propietario para que puedan llegar a un acuerdo. El arrendador responderá en un lapso de 72 horas.",
+    response: "Si, ya solicitastes una reserva se habilitará un chat con el propietario para que puedan llegar a un acuerdo. El arrendador responderá en un lapso de 72 horas.",
   },
   {
     keywords: [
       "cuánto cuesta publicar",
       "es gratis publicar",
       "tengo que pagar por publicar",
-      "cuánto vale poner un anuncio"
+      "se paga por publicar",
+      "costo de publicar",
+      "precio de publicar",
+      "cuánto vale publicar",
     ],
     response: "¡Publicar es completamente gratis! No cobramos ninguna comisión.",
   },
@@ -117,41 +116,70 @@ export const botRules: BotRule[] = [
     type: "agradecimiento"
   },
   // Confirmaciones
-  {
-    keywords: ["ok", "okay", "está bien", "vale", "de acuerdo"],
-    response: "Perfecto, quedo atento por si necesitás algo más.",
-    type: "confirmacion"
-  }
 ];
 
 const badWords = [
   "mierda", "puta", "carajo", "estúpido", "estupido", "imbécil", "imbecil",
-  "pelotudo", "boludo", "pendejo", "hdp", "hijo de puta", "maldito"
+  "pelotudo", "boludo", "pendejo", "hdp", "hijo de puta", "maldito", "feo",
 ];
 
-export const getBotResponse = (message: string): string | null => {
-  const normalizedMessage = message.toLowerCase();
+// Función de normalización mejorada
+const normalizeText = (text: string): string => {
+  return text
+    .toLowerCase()
+    .normalize("NFD") 
+    .replace(/[\u0300-\u036f]/g, "") 
+    .replace(/[¿?¡!.,;:]/g, "") 
+    .trim();
+};
 
+export const getBotResponse = (message: string): string | null => {
+  const normalizedMessage = normalizeText(message);
+  const messageWords = normalizedMessage.split(/\s+/).filter(word => word.length > 0); // Divide en palabras
+
+  // Manejo de malas palabras
   if (badWords.some(badWord => normalizedMessage.includes(badWord))) {
     return "Por favor, mantené un lenguaje respetuoso. No se permite el uso de malas palabras.";
   }
 
-  const matchedIntents = botRules.filter(rule =>
-    rule.keywords.some(keyword => normalizedMessage.includes(keyword))
-  );
+  let bestMatch: BotRule | null = null;
+  let maxMatchedKeywords = 0;
 
-  if (matchedIntents.length > 1) {
-    const responses: string[] = [];
-    const seenTypes = new Set<string>();
+  for (const rule of botRules) {
+    let currentMatchedKeywords = 0;
+    // Normalizar las palabras clave de la regla una sola vez al inicio del bucle
+    const normalizedRuleKeywords = rule.keywords.map(kw => normalizeText(kw));
 
-    for (const rule of matchedIntents) {
-      if (!rule.type || seenTypes.has(rule.type)) continue;
-      seenTypes.add(rule.type);
-      responses.push(rule.response);
+    for (const ruleKeyword of normalizedRuleKeywords) {
+      // Si la frase normalizada del usuario contiene la palabra clave normalizada de la regla
+      if (normalizedMessage.includes(ruleKeyword)) {
+
+        currentMatchedKeywords += ruleKeyword.split(/\s+/).filter(word => word.length > 0).length; // Suma las palabras de la frase clave
+      } else {
+        // Intenta coincidir palabras individuales
+        const ruleKeywordWords = ruleKeyword.split(/\s+/).filter(word => word.length > 0);
+        let individualWordMatches = 0;
+        for (const rkWord of ruleKeywordWords) {
+          if (messageWords.includes(rkWord)) {
+            individualWordMatches++;
+          }
+        }
+        if (individualWordMatches > 0) {
+            // Asigna un peso menor a las coincidencias de palabras individuales
+            currentMatchedKeywords += individualWordMatches * 0.5; 
+        }
+      }
     }
 
-    return responses.join(" ");
+    // Un umbral mínimo para considerar una coincidencia
+    const threshold = 1.5; 
+
+    if (currentMatchedKeywords > maxMatchedKeywords && currentMatchedKeywords >= threshold) {
+      maxMatchedKeywords = currentMatchedKeywords;
+      bestMatch = rule;
+    }
   }
 
-  return matchedIntents[0]?.response ?? null;
+  // Si no se encuentra una coincidencia, Ollama se encargue
+  return bestMatch?.response ?? null;
 };

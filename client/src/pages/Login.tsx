@@ -8,6 +8,7 @@ import { toast, ToastContainer, ToastOptions } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import AuthService from '../services/AuthService.ts';
 import PupilinkRoutes from '../enums/PupilinkRoutes.ts';
+import { GoogleLogin, CredentialResponse } from '@react-oauth/google'
 
 const Login: React.FC = () => {
     const [email, setEmail] = useState('');
@@ -47,6 +48,39 @@ const Login: React.FC = () => {
             console.error(error);
         }
     };
+
+    const handleGoogleSuccess = async (resp: CredentialResponse) => {
+    if (!resp.credential) return;
+    try {
+        // 1) Envía el ID token a tu servicio
+        await AuthService.loginWithGoogle(resp.credential);
+        // 2) Muestra toast de éxito
+        toast.success('Inicio de sesión con Google exitoso', {
+        ...toastOptions,
+        style: { backgroundColor: 'white', color: 'green' },
+        progressStyle: { backgroundColor: 'green' }
+        });
+        // 3) Redirige a la raíz
+        navigate(PupilinkRoutes.ROOT);
+    } catch (err) {
+        toast.error('Error al iniciar sesión con Google', {
+        ...toastOptions,
+        style: { backgroundColor: 'white', color: 'red' },
+        progressStyle: { backgroundColor: 'red' }
+        });
+        console.error(err);
+    }
+    };
+
+    const handleGoogleError = () => {
+    toast.error('Error al iniciar sesión con Google', {
+        ...toastOptions,
+        style: { backgroundColor: 'white', color: 'red' },
+        progressStyle: { backgroundColor: 'red' }
+    });
+    console.error('GoogleLogin error');
+    };
+
 
     useEffect(() => {
         if (AuthService.isLoggedIn()) {
@@ -97,6 +131,15 @@ const Login: React.FC = () => {
                         Iniciar sesión
                     </button>
                 </form>
+
+                <div className="my-4 text-center">o</div>
+                    <div className="flex justify-center mb-4">
+                    <GoogleLogin
+                        onSuccess={handleGoogleSuccess}
+                        onError={handleGoogleError}
+                        useOneTap
+                    />
+                </div>
 
                 <div className="mt-4 text-center">
                     <span className="text-gray-700">¿No tienes una cuenta? </span>
