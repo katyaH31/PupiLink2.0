@@ -9,15 +9,11 @@ export const botRules: BotRule[] = [
     keywords: [
       "cómo publico",
       "publicar propiedad",
-      "quiero alquilar mi lugar",
       "subir un anuncio",
       "poner en alquiler",
       "quisiera publicar",
-      "deseo publicar",
       "me gustaría publicar",
       "quiero publicar",
-      "cómo puedo publicar",
-      "quiero subir una propiedad",
       "cómo poner mi propiedad",
       "cómo alquilar mi propiedad"
     ],
@@ -39,11 +35,9 @@ export const botRules: BotRule[] = [
       "cuánto cuesta publicar",
       "es gratis publicar",
       "tengo que pagar por publicar",
-      "cuánto vale poner un anuncio",
       "se paga por publicar",
       "costo de publicar",
       "precio de publicar",
-      "cuánto cuesta poner en alquiler",
       "cuánto vale publicar",
     ],
     response: "¡Publicar es completamente gratis! No cobramos ninguna comisión.",
@@ -122,16 +116,11 @@ export const botRules: BotRule[] = [
     type: "agradecimiento"
   },
   // Confirmaciones
-  {
-    keywords: ["ok", "okay", "está bien", "vale", "de acuerdo"],
-    response: "Perfecto, quedo atento por si necesitás algo más.",
-    type: "confirmacion"
-  }
 ];
 
 const badWords = [
   "mierda", "puta", "carajo", "estúpido", "estupido", "imbécil", "imbecil",
-  "pelotudo", "boludo", "pendejo", "hdp", "hijo de puta", "maldito"
+  "pelotudo", "boludo", "pendejo", "hdp", "hijo de puta", "maldito", "feo",
 ];
 
 // Función de normalización mejorada
@@ -177,7 +166,7 @@ export const getBotResponse = (message: string): string | null => {
         }
         if (individualWordMatches > 0) {
             // Asigna un peso menor a las coincidencias de palabras individuales
-            currentMatchedKeywords += individualWordMatches * 0.3; 
+            currentMatchedKeywords += individualWordMatches * 0.5; 
         }
       }
     }
