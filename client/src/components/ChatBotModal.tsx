@@ -3,6 +3,7 @@ import { getBotResponse } from "../data/botRules";
 import pupibotIcon from "../assets/pupibot.png";
 import ClearIcon from "@mui/icons-material/Clear";
 import axios from "axios"; 
+import pupiLinkInfo from "../data/pupilink_context.txt";
 
 type ChatMessage = {
   sender: "user" | "bot" | "typing";
@@ -91,7 +92,12 @@ const ChatBotModal: React.FC<ChatBotModalProps> = ({ onClose }) => {
       try {
         // System Prompt para Ollama
         const systemPromptContent =
-          "Eres PupiBot, un asistente virtual experto y conciso en el área de pupilajes y el uso de la plataforma PupiLink. Responde de forma breve y directa a las preguntas, centrándote solo en el tema de los pupilajes y PupiLink. Si la pregunta no está relacionada, di amablemente que solo puedes ayudar con temas de PupiLink.";
+           `Eres PupiBot, un asistente virtual experto y conciso en el área de pupilajes y el uso de la plataforma PupiLink. Responde de forma breve y directa a las preguntas, centrándote solo en el tema de los pupilajes y PupiLink. Si la pregunta no está relacionada, di amablemente que solo puedes ayudar con temas de PupiLink.
+
+          A continuación, se te proporciona información detallada sobre la plataforma PupiLink para ayudarte a responder con precisión:
+          ${pupiLinkInfo}
+
+          Considera esta información para generar tus respuestas, pero mantenlas concisas y enfocadas.`;
 
         // Inicia el historial de la conversación con el System Prompt
         const conversationHistory = [
@@ -102,14 +108,19 @@ const ChatBotModal: React.FC<ChatBotModalProps> = ({ onClose }) => {
         ];
 
 
-        messages
-          .filter((msg) => msg.sender !== "typing")
-          .forEach((msg) => {
-            conversationHistory.push({
-              role: msg.sender === "user" ? "user" : "assistant", // Mapea 'bot' a 'assistant'
-              content: msg.text,
-            });
-          });
+         const HISTORY_LIMIT_FOR_OLLAMA = 5; // Por ejemplo, los últimos 5 intercambios (usuario+bot)
+
+      // Filtra mensajes de "typing" y toma los últimos N mensajes reales
+      const recentMessages = messages
+        .filter((msg) => msg.sender !== "typing")
+        .slice(Math.max(0, messages.length - HISTORY_LIMIT_FOR_OLLAMA));
+
+      recentMessages.forEach((msg) => {
+        conversationHistory.push({
+          role: msg.sender === "user" ? "user" : "assistant",
+          content: msg.text,
+        });
+      });
 
         
         conversationHistory.push({ role: "user", content: currentInput });
